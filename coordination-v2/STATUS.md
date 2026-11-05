@@ -1,4 +1,4 @@
-# STATUS — evidence only (last update Fri Nov 6, ~02:20 AM IST)
+# STATUS — evidence only (last update Fri Nov 6, ~02:45 AM IST)
 
 No percentages. Each line has evidence or says unknown.
 
@@ -11,12 +11,13 @@ No percentages. Each line has evidence or says unknown.
 | Multi-agent architecture | Active | 3 Agent Pages created: `cursor`, `anti-gravity`, `freebuf` |
 | Primary coordination point | Cursor Agent | Defined in `coordination-v2/agents/cursor.md` |
 | Deployer wallet | 0.1 0G on Galileo | Live `eth_getBalance` ~02:15 AM IST: `100000000000000000` wei for `0x237eA22D38a1e20EC50b39711014B9C87dBb21c7`. Chain id `0x40da` (16602). Private key is in local `.env` and is not in git. |
-| Storage indexer | Host up, root is not a page | `indexer-storage-testnet-turbo.0g.ai` DNS ok. `GET /` = 404. `GET /file` = 200. ~02:15 AM IST. |
-| Storage RPC hostname | Does not resolve | `storagerpc-testnet.0g.ai` DNS name does not exist. ~02:15 AM IST. Upload skill uses the chain RPC plus the indexer. |
+| Official 0G skills | Installed locally, gitignored | `https://build.0g.ai/install` with `--agent cursor --parts compute,storage,chain --yes`. 25 skills in `.0g-skills`. ~02:40 AM IST. |
+| SDK pin | Root `package.json` | `@0gfoundation/0g-storage-ts-sdk` ^1.2.13, `@0gfoundation/0g-compute-ts-sdk` ^0.9.0, `ethers` 6.13.1 exact. |
+| Chain id hex | Settled | Decimal 16602. Live `eth_chainId` was `0x40da`. `0x40EA` was wrong. |
+| Storage path | Indexer plus chain RPC | `storagerpc-testnet.0g.ai` does not resolve. Indexer `GET /file` returned 200 at ~02:15 AM IST. |
 | Private Computer router | TLS failed from this machine | `router-api-testnet.integratenetwork.work` handshake failed. ~02:15 AM IST. No models list. |
-| 0G SDKs | Installed in `infra/` | storage `1.2.13`, compute `0.9.0`, `ethers` `6.13.1`. `npm install` added 325 packages. ~02:20 AM IST. |
-| Contract tests after Cancun | 10/10 passing | `forge test` with `C:\Users\acer\.foundry\bin\forge.exe`, solc 0.8.19, `evm_version = cancun`. ~02:20 AM IST. |
-| Foundry binary | Two copies | Cargo `forge` is March 2023. Use `C:\Users\acer\.foundry\bin\forge.exe` (build 2024-10-26). |
+| Foundry Cancun | Set | `contracts/foundry.toml` `evm_version = "cancun"`, solc 0.8.19. 10/10 tests passed ~02:20 AM IST with `C:\Users\acer\.foundry\bin\forge.exe`. |
+| Next.js app | Not started | Step 1 is the installer. The full-stack Next.js + wagmi prompt is the next order. |
 | Live deploy | Not authorized | `coordination-v2/COMMANDS.md` |
 | Submission deadline | Sat Nov 7, 9:00 AM IST | Hackathon rules (target 7:30 AM IST) |
 

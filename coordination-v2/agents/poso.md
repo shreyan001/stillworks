@@ -48,7 +48,7 @@ flowchart TD
 
 ### Layer A: 0G Storage (Data & RAG Utility)
 - **Indexer:** `https://indexer-storage-testnet-turbo.0g.ai`
-- **RPC:** `https://storagerpc-testnet.0g.ai`
+- **Upload path:** `https://indexer-storage-testnet-turbo.0g.ai` plus `https://evmrpc-testnet.0g.ai`
 - **Package:** `@0gfoundation/0g-storage-ts-sdk` with `ethers@6.13.1`
 - **Operation:**
   - Ingests application docs, passports, and RAG knowledge state.

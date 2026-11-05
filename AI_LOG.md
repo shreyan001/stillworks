@@ -84,3 +84,11 @@ Format:
 - Tool / model: Cursor agent (Grok 4.7)
 - Prompt summary: "Install the 0G infrastructure, coordinate the other agents, and integrate with main"
 - Commit: 5bb16cb
+
+## 2026-11-06 02:40 IST — official 0G install, settled endpoints
+- Files: .0g-skills/ (local, gitignored), .cursor/rules/0g.mdc, .cursorrules, .env.example, package.json, package-lock.json, contracts/foundry.toml, contracts/script/DeployGalileo.s.sol, coordination-v2/ZEROG_INFRASTRUCTURE.md, coordination-v2/agents/cursor.md, coordination-v2/agents/poso.md, coordination-v2/agents/antigravity.md, coordination-v2/agents/anti-gravity.md, coordination-v2/STATUS.md, AI_LOG.md
+- AI-generated: ran https://build.0g.ai/install for Cursor with compute, storage, and chain; pinned the installer SDK line; corrected chain hex to 0x40DA; stopped using the unresolved storage RPC hostname; set Cancun in Foundry
+- Human (shreyan): ordered the inconsistencies settled, the base installer used, and the result pushed and merged to main
+- Tool / model: Cursor agent (Grok 4.7)
+- Prompt summary: "settle them and install with the base template, push, and merge to main"
+- Commit: cce13b8
