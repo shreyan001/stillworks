@@ -7,7 +7,13 @@ Source: `/workspace/stillworks/LINKS.md` (researcher-checked Nov 5) unless marke
 - Coding agent prompt: `/workspace/stillworks/AGENT_PROMPT.md`
 - Data room (Markdown copy): `dataroom/data-room-canvas.md`
 - Old data room site (⚠️ login-gated, not captured): https://sovereign-software-ethglobal-mumbai-data-fv2l.pages.grok.bot/
-- Repo: `stillworks` (MIT) — ⚠️ URL to add once created
+- Repo: `stillworks` (MIT) — https://github.com/shreyan001/stillworks
+
+## Active Deployer / Agent Wallet
+- **Public Address:** `0x237eA22D38a1e20EC50b39711014B9C87dBb21c7`
+- **0G Galileo Balance:** `0.1 0G` (verified live on Galileo RPC)
+- **Explorer:** https://chainscan-galileo.0g.ai/address/0x237eA22D38a1e20EC50b39711014B9C87dBb21c7
+- **Private Key:** Stored locally in `.env` (NEVER committed to git)
 
 ## Prize pages (✅ fetched with curl Thu Nov 5)
 - EF Best CROPS App: https://ethglobal.com/events/mumbai/prizes/ethereum-foundation

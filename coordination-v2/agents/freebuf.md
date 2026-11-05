@@ -4,21 +4,34 @@
 **Branch:** `freebuf`  
 **Primary Harness:** Freebuf Autonomous Agent  
 **Coordination Parent:** Cursor Agent  
+**Deployer Wallet:** `0x237eA22D38a1e20EC50b39711014B9C87dBb21c7` (0.1 0G Galileo funded)  
 
 ---
 
-## Directives & Operating Charter
+## 1. 0G Storage & Compute Architecture Scope
 
-1. **Scope & Execution Boundary:**
-   - Dedicated to security analysis, threat modeling, off-chain service integration, and cryptographic validation.
-   - Audits contract invariants (escrow solvency, reentrancy guards, heartbeat timestamp manipulation, pro-rata refund calculations).
-   - Coordinates off-chain 0G components (0G Private Computer inference client, 0G Storage bundle encryption, Arkiv discovery mirroring).
+FreeBuf verifies the security, cryptography, and off-chain service invariants of Stillworks:
 
-2. **Active Work Orders & Responsibilities:**
-   - **Task FB-01:** Comprehensive security review of escrow fund/refund rails to guarantee no trapped funds or front-running vectors.
-   - **Task FB-02:** Design the 0G Private Computer audit pipeline harness (OpenAI-compatible client with `X-Request-ID` extraction).
-   - **Task FB-03:** Verify walkaway bundle encryption format (client-side AES-256 / ECIES with wallet-derived key) to satisfy CROPS "S" criteria.
+1. **0G Storage & RAG Knowledge Security:**
+   - Indexer: `https://indexer-storage-testnet-turbo.0g.ai`
+   - Verification of Merkle roots uploaded to 0G Storage.
+   - Client-side encryption audit for walkaway data bundles (AES-256-GCM / ECIES) using wallet-derived keys so 0G Storage never holds plaintext user secrets.
+   - RAG pipeline audit: Ensuring document chunks and embeddings stored on 0G Storage maintain byte-level integrity.
 
-3. **Reporting & Handoffs:**
-   - Files security audit findings and integration specs directly to `coordination-v2/agents/freebuf.md`.
-   - Reports blockers and threat findings directly to the Cursor coordination point.
+2. **0G Private Computer (TEE Compute Utility) Audit:**
+   - Router: `https://router-api-testnet.integratenetwork.work/v1`
+   - Header verification: Ensure `X-0G-Provider-Trust-Mode: private` is enforced on inference calls.
+   - Request-ID attestation: Verify extraction of `X-Request-ID` / `x_0g_trace.request_id` to prevent spoofed audit receipts.
+
+3. **Smart Contract Attack Surface Analysis:**
+   - Escrow invariant: Verify total locked balance in `SubscriptionEscrow.sol` always equals `(fundedPeriods - releasedPeriods) * pricePerPeriod`.
+   - Heartbeat monotonicity: Ensure `period > lastHeartbeatPeriod` prevents replaying older heartbeats to trigger unearned releases.
+   - Front-running protection: Confirm `claimRefund()` cannot be front-run by a malicious founder submitting a retroactive heartbeat after the grace window expires.
+
+---
+
+## 2. Active Tasks & Deliverables
+
+- **Task FB-01:** File formal security invariant matrix for `SubscriptionAgreement.sol` and `SubscriptionEscrow.sol`.
+- **Task FB-02:** Prepare test harness for 0G Storage upload/download verification using `@0gfoundation/0g-storage-ts-sdk`.
+- **Task FB-03:** Review 0G Private Computer prompt injection defenses for the automated passport compliance scoring agent.

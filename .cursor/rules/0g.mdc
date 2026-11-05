@@ -1,0 +1,13 @@
+---
+description: 0G Network and Multi-Agent Coordination Rules
+globs: **/*
+---
+
+# 0G Core Rules for Stillworks
+
+- Primary Coordination Agent: Cursor (`coordination-v2/agents/cursor.md`)
+- Deployer Address: `0x237eA22D38a1e20EC50b39711014B9C87dBb21c7`
+- 0G Chain ID: 16602 (Galileo testnet) | RPC: https://evmrpc-testnet.0g.ai
+- 0G Storage Indexer: https://indexer-storage-testnet-turbo.0g.ai
+- 0G Compute Router: https://router-api-testnet.integratenetwork.work/v1
+- For all 0G SDK patterns, read `./.0g-skills/CLAUDE.md` and `./.0g-skills/patterns/NETWORK_CONFIG.md`.
