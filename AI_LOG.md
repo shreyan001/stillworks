@@ -83,4 +83,4 @@ Format:
 - Human (shreyan): ordered the inconsistencies settled, the base installer used, and the result pushed and merged to main
 - Tool / model: Cursor agent (Grok 4.7)
 - Prompt summary: "settle them and install with the base template, push, and merge to main"
-- Commit: (pending commit)
+- Commit: cce13b8
