@@ -100,3 +100,11 @@ Format:
 - Tool / model: Firstmate (Antigravity)
 - Prompt summary: "now let us deal with the main recipe to build , maintain a good readme add the whole website template of 0g as specified... Build a full-stack AI dApp on 0G using Next.js. Connect to 0G Chain for transactions, 0G Storage for data persistence, and 0G Compute for AI inference. Include wallet connection with wagmi."
 - Commit: 0f90b09
+
+## 2026-11-06 03:25 IST — 0G Storage Baseline Tests, In-App Import/Export & Hosting Blueprint
+- Files: scripts/test-storage-baseline.mjs, app/src/components/StorageExplorer.tsx, app/src/app/page.tsx, app/src/lib/zerog/storage.ts, app/src/app/api/storage/download/route.ts, coordination-v2/ZEROG_DEPLOYMENT_REQUIREMENTS.md, package.json, app/package.json, AI_LOG.md
+- AI-generated: Fine-tuned 0G Storage test suite (4/4 tests passing: indexer connectivity, live discovery of 6 storage nodes, 32-byte Merkle root derivation, download & fault injection); refactored StorageExplorer UI into clean dual-mode Import & Export station; Next.js download API route; comprehensive 0G hosting & domain ID architecture spec.
+- Human (shreyan): Requested focusing on Wagmi and real 0G Storage import/export tests from the app, removing distractions, and specifying 0G site hosting & domain ID requirements.
+- Tool / model: Firstmate (Antigravity)
+- Prompt summary: "Rather than worrying about the inference and about the project itself... concentrate on having the Wagmi... put some proper tests for storage so that I could see whether we can actually import or export... where is this application going to be hosted? What is the whole set of requirements?"
+- Commit: c38a9bf

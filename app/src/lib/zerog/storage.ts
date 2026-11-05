@@ -62,3 +62,34 @@ export async function uploadToZeroGStorage(
     }
   }
 }
+
+export async function downloadFromZeroGStorage(
+  rootHash: string
+): Promise<{ buffer: Buffer; stringContent: string; verified: boolean }> {
+  const indexerRpc = process.env.NEXT_PUBLIC_0G_STORAGE_INDEXER || 'https://indexer-storage-testnet-turbo.0g.ai';
+  const indexer = new Indexer(indexerRpc);
+
+  const tempFilePath = path.join(os.tmpdir(), `zerog-dl-${Date.now()}-${rootHash.slice(0, 8)}.tmp`);
+
+  try {
+    const err = await indexer.download(rootHash, tempFilePath, true);
+    if (err) {
+      throw new Error(`0G Storage download failed: ${JSON.stringify(err)}`);
+    }
+
+    const buffer = fs.readFileSync(tempFilePath);
+    return {
+      buffer,
+      stringContent: buffer.toString('utf8'),
+      verified: true,
+    };
+  } finally {
+    if (fs.existsSync(tempFilePath)) {
+      try {
+        fs.unlinkSync(tempFilePath);
+      } catch (e) {
+        // ignore
+      }
+    }
+  }
+}

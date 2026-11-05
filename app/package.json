@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:storage": "node ../scripts/test-storage-baseline.mjs"
   },
   "dependencies": {
     "@0gfoundation/0g-storage-ts-sdk": "^1.2.13",
