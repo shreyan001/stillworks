@@ -75,4 +75,12 @@ Format:
 - Human (shreyan): provided private key, requested .env configuration, wallet balance verification, POSO protocol specification, 0G build links, and Cursor instant initialization setup
 - Tool / model: Firstmate (Antigravity)
 - Prompt summary: "As for the information on the Galileo agents, I want you to add information for all the agents, like poso.md or antigravity.md... private key add the .env and write the public address at a useful spot"
+- Commit: 8dee591
+
+## 2026-11-06 02:20 IST — pin 0G SDKs and verify Galileo
+- Files: infra/package.json, infra/probe.mjs, contracts/foundry.toml, contracts/script/DeployGalileo.s.sol, .cursorrules, .env.example, coordination-v2/COMMANDS.md, coordination-v2/STATUS.md, AI_LOG.md
+- AI-generated: SDK pin, read-only chain probe, Cancun compiler flag, deploy script reads PRIVATE_KEY first, live command board, status evidence
+- Human (shreyan): ordered Cursor to load the rules, install 0G infrastructure, and push to the main working tree. Wallet funding and the 02:06 blueprint were already his.
+- Tool / model: Cursor agent (Grok 4.7)
+- Prompt summary: "Install the 0G infrastructure, coordinate the other agents, and integrate with main"
 - Commit: (pending commit)

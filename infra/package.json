@@ -1,0 +1,12 @@
+{
+  "name": "stillworks-0g-infra",
+  "private": true,
+  "type": "module",
+  "description": "Pinned 0G Storage and Compute SDKs for Stillworks. No application code.",
+  "dependencies": {
+    "@0gfoundation/0g-compute-ts-sdk": "^0.9.0",
+    "@0gfoundation/0g-storage-ts-sdk": "^1.2.12",
+    "dotenv": "^16.4.0",
+    "ethers": "6.13.1"
+  }
+}

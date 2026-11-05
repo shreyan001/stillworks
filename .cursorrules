@@ -16,7 +16,15 @@ Deployer Wallet: `0x237eA22D38a1e20EC50b39711014B9C87dBb21c7` (0.1 0G funded on 
 5. ALWAYS use `ethers` v6 (`6.13.1` exact pin when paired with `@0gfoundation/0g-storage-ts-sdk`).
 6. ALWAYS close `ZgFile` handles with `file.close()` in `finally` blocks.
 7. NEVER hardcode private keys — read from `.env`.
-8. For 0G Agent Skills reference `./.0g-skills/patterns/NETWORK_CONFIG.md` and `./.0g-skills/skills/`.
+8. For 0G Agent Skills reference these files before writing 0G code:
+   - `./.0g-skills/AGENTS.md`
+   - `./.0g-skills/patterns/NETWORK_CONFIG.md`
+   - `./.0g-skills/patterns/STORAGE.md`
+   - `./.0g-skills/patterns/COMPUTE.md`
+   - `./.0g-skills/patterns/CHAIN.md`
+   - `./.0g-skills/skills/` for the matching skill (`storage`, `compute`, `chain`, `cross-layer`)
+9. Solidity stays `0.8.19` for the Stillworks contracts. The generic chain skill example uses `0.8.24`; do not bump the compiler unless the Captain approves it.
+10. Live orders are in `coordination-v2/COMMANDS.md`. Read that file before starting work. Do not broadcast a deploy unless the current command says so.
 
 ## Coordination Roster
 - **Cursor (Primary):** Lead Coordinator & Architectural Hub (`coordination-v2/agents/cursor.md`).

@@ -23,7 +23,10 @@ contract DeployGalileo {
     SubscriptionEscrow public escrow;
 
     function run() external returns (address registryAddr, address agreementAddr, address escrowAddr) {
-        uint256 deployerKey = vm.envOr("DEPLOYER_PRIVATE_KEY", uint256(0));
+        uint256 deployerKey = vm.envOr("PRIVATE_KEY", uint256(0));
+        if (deployerKey == 0) {
+            deployerKey = vm.envOr("DEPLOYER_PRIVATE_KEY", uint256(0));
+        }
 
         if (deployerKey != 0) {
             vm.startBroadcast(deployerKey);
