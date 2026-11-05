@@ -142,3 +142,11 @@ Format:
 - Prompt summary: "You are scout-web3-loopback. Research replaceable Web3-based VPS systems, decentralized schedulers, and private loopback systems to complete the sovereign product loop while upholding the CROPS standard..."
 - Commit: ce7040f
 
+
+## 2026-11-06 04:30 IST — 0G Ecosystem Architectural Capabilities & Hard Boundaries Report
+- Files: coordination-v2/ZEROG_ECOSYSTEM_BOUNDARIES.md, AI_LOG.md
+- AI-generated: Comprehensive boundary audit of the 0G ecosystem: establishing that 0G Compute is strictly AI inference (not container/PaaS compute like Railway/Postgres); documenting 0G Storage Log layer vs KV layer constraints; live audit of 124 models on 0G router proving only 8 support hardware TEE attestation (highlighting 0gm-1.0-35b-a3b as the mandatory TeeML model); confirming zero native onchain cron on 0G Chain; outlining zero-backend static storefront architecture.
+- Human (shreyan): Requested deep research into 0G ecosystem boundaries and what possibilities are available within 0G.
+- Tool / model: scout-zerog-capabilities (Firstmate Subagent)
+- Prompt summary: "You are scout-zerog-capabilities. Conduct deep research into the 0G ecosystem capabilities and hard boundaries..."
+- Commit: 21c8322
