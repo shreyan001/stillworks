@@ -30,7 +30,7 @@ flowchart LR
 
 ### A. 0G Chain (Settlement & Liveness Verification)
 - **RPC:** `https://evmrpc-testnet.0g.ai`
-- **Chain ID:** `16602` (`0x40EA`)
+- **Chain ID:** `16602` (`0x40DA`)
 - **Block Explorer:** `https://chainscan-galileo.0g.ai`
 - **Faucet:** `https://faucet.0g.ai` (0.1 0G/day)
 - **Core Contracts:**
@@ -41,7 +41,7 @@ flowchart LR
 
 ### B. 0G Storage (RAG Knowledge & Exit Bundles)
 - **Storage Indexer:** `https://indexer-storage-testnet-turbo.0g.ai`
-- **Storage RPC:** `https://storagerpc-testnet.0g.ai`
+- **Storage upload path:** chain RPC plus the turbo indexer. `storagerpc-testnet.0g.ai` does not resolve and is not used.
 - **SDK Package:** `@0gfoundation/0g-storage-ts-sdk`
 - **Critical Dependency Pin:** `ethers@6.13.1` (exact pin required by storage SDK)
 - **Use Cases:**

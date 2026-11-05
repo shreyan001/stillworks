@@ -1,4 +1,4 @@
-# STATUS — evidence only (last update Fri Nov 6, ~01:35 AM IST)
+# STATUS — evidence only (last update Fri Nov 6, ~02:40 AM IST)
 
 No percentages. Each line has evidence or says unknown.
 
@@ -10,7 +10,13 @@ No percentages. Each line has evidence or says unknown.
 | Galileo deploy script | Implemented | `contracts/script/DeployGalileo.s.sol` compiled with solc 0.8.19 |
 | Multi-agent architecture | Active | 3 Agent Pages created: `cursor`, `anti-gravity`, `freebuf` |
 | Primary coordination point | Cursor Agent | Defined in `coordination-v2/agents/cursor.md` |
-| Accounts, keys, faucets, credits | Separate concern | Faucets / testing tokens deferred per Captain instruction |
+| Official 0G skills | Installed locally, gitignored | `curl https://build.0g.ai/install` with `--agent cursor --parts compute,storage,chain --yes`. 25 skills in `.0g-skills`. ~02:40 AM IST. |
+| SDK pin | In package.json | `@0gfoundation/0g-storage-ts-sdk` ^1.2.13, `@0gfoundation/0g-compute-ts-sdk` ^0.9.0, `ethers` 6.13.1 exact. npm added 325 packages. |
+| Chain id hex | Settled | Decimal 16602. Live `eth_chainId` was `0x40da`. Docs that said `0x40EA` were wrong. |
+| Storage RPC hostname | Not used | `storagerpc-testnet.0g.ai` does not resolve. Uploads use the turbo indexer plus `https://evmrpc-testnet.0g.ai`. |
+| Foundry Cancun | Set in this branch | `contracts/foundry.toml` `evm_version = "cancun"`, solc 0.8.19. |
+| Next.js app | Not started | Step 1 is the installer. The full-stack Next.js + wagmi prompt is the next order. |
+| Accounts, keys, faucets, credits | Wallet funded earlier | Deployer `0x237eA22D38a1e20EC50b39711014B9C87dBb21c7` had 0.1 0G at ~02:15 AM IST. Private key stays in gitignored `.env`. |
 | Submission deadline | Sat Nov 7, 9:00 AM IST | Hackathon rules (target 7:30 AM IST) |
 
 ## Active Agent Branches & Roles

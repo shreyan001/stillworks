@@ -11,7 +11,7 @@
 ## 1. 0G Chain & Infrastructure Connections
 
 - **Network:** 0G Galileo Testnet
-- **Chain ID:** `16602` (`0x40EA`)
+- **Chain ID:** `16602` (`0x40DA`)
 - **RPC Endpoint:** `https://evmrpc-testnet.0g.ai`
 - **Block Explorer:** [chainscan-galileo.0g.ai](https://chainscan-galileo.0g.ai)
 - **Deployment Script:** [`contracts/script/DeployGalileo.s.sol`](../../contracts/script/DeployGalileo.s.sol)

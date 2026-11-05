@@ -11,9 +11,9 @@
 ## 1. 0G Network Infrastructure Reference
 
 Cursor references these network values automatically:
-- **0G Galileo RPC:** `https://evmrpc-testnet.0g.ai` (Chain ID: `16602`)
+- **0G Galileo RPC:** `https://evmrpc-testnet.0g.ai` (Chain ID: `16602`, hex `0x40DA`)
 - **0G Storage Indexer (Turbo):** `https://indexer-storage-testnet-turbo.0g.ai`
-- **0G Storage RPC:** `https://storagerpc-testnet.0g.ai`
+- **Storage upload path:** that indexer plus the Galileo RPC. `storagerpc-testnet.0g.ai` does not resolve.
 - **0G Private Computer Router:** `https://router-api-testnet.integratenetwork.work/v1`
 - **Payment Layer Contract:** `0x0AD9690e0b34aB2d493DE02cDF149ee34f6C9939`
 - **Official 0G Skills:** Installed in `./.0g-skills` (reference `./.0g-skills/patterns/NETWORK_CONFIG.md`)
