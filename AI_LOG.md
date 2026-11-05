@@ -51,4 +51,12 @@ Format:
 - Human (shreyan): approved git repository initialization and provided remote repo URL https://github.com/shreyan001/stillworks
 - Tool / model: Firstmate (Antigravity)
 - Prompt summary: "yup https://github.com/shreyan001/stillworks is the git"
-- Commit: (initial baseline commit)
+- Commit: ee32d99
+
+## 2026-11-06 01:28 IST — SubscriptionAgreement & SubscriptionEscrow with Foundry tests
+- Files: contracts/src/SubscriptionAgreement.sol, contracts/src/SubscriptionEscrow.sol, contracts/test/SubscriptionFlow.t.sol, contracts/README.md, ops/TASKS.md, ops/STATE.md
+- AI-generated: SubscriptionAgreement and SubscriptionEscrow contracts; comprehensive Foundry test suite covering sequential release, walkaway requests, and pro-rata refunds on missed heartbeats (10/10 tests passing across suite); task and ops updates
+- Human (shreyan): approved Phase 2 contract design and direction
+- Tool / model: Firstmate (Antigravity)
+- Prompt summary: "yup https://github.com/shreyan001/stillworks is the git"
+- Commit: (pending push)

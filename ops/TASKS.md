@@ -5,12 +5,12 @@ Rule: one box at a time per lane. Tick it only when the "done when" is true.
 ## Main timeline (Lane A: coding agent, supervised by firstmate)
 
 ### Phase 1 — Stage 1 contracts · Thu 10:45 PM → 11:05 PM (overrun cap: 11:45 PM)
-- [ ] Repo `stillworks` public, MIT, scaffold (contracts/ app/ arkiv/ README with empty CROPS, AI_LOG.md, .gitignore) — *done when:* pushed to GitHub
-- [ ] `ProductRegistry.sol` (register, proposePassport, approvePassport, heartbeat; events) + tests — *done when:* `forge test` green, pushed
+- [x] Repo `stillworks` public, MIT, scaffold (contracts/ app/ arkiv/ README with empty CROPS, AI_LOG.md, .gitignore) — *done when:* pushed to GitHub
+- [x] `ProductRegistry.sol` (register, proposePassport, approvePassport, heartbeat; events) + tests — *done when:* `forge test` green, pushed
 
 ### Phase 2 — Stage 2 escrow/agreement · Thu 11:45 PM → Fri 3:00 AM
-- [ ] `SubscriptionAgreement.sol` (create, cancel, requestWalkaway) — *done when:* tests green
-- [ ] `SubscriptionEscrow.sol` (fund(n), release(period), claimRefund; pro-rata on missed heartbeat) — *done when:* release + refund math tests green
+- [x] `SubscriptionAgreement.sol` (create, cancel, requestWalkaway) — *done when:* tests green
+- [x] `SubscriptionEscrow.sol` (fund(n), release(period), claimRefund; pro-rata on missed heartbeat) — *done when:* release + refund math tests green
 - [ ] shreyan reviews design of both — *done when:* his edits logged in AI_LOG.md
 
 ### Phase 3 — Stage 3 invoice + 0G PC + Storage + Arkiv · Fri 3:00 AM → 9:00 AM
