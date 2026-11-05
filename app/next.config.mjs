@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
   reactStrictMode: true,
-  experimental: {
-    serverComponentsExternalPackages: ['@0gfoundation/0g-storage-ts-sdk', 'ethers'],
+  images: {
+    unoptimized: true,
   },
   webpack: (config, { isServer }) => {
     config.externals.push('pino-pretty', 'lokijs', 'encoding');
