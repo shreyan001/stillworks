@@ -83,4 +83,4 @@ Format:
 - Human (shreyan): ordered Cursor to load the rules, install 0G infrastructure, and push to the main working tree. Wallet funding and the 02:06 blueprint were already his.
 - Tool / model: Cursor agent (Grok 4.7)
 - Prompt summary: "Install the 0G infrastructure, coordinate the other agents, and integrate with main"
-- Commit: (pending commit)
+- Commit: 5bb16cb
