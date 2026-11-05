@@ -116,3 +116,20 @@ Format:
 - Tool / model: Crewmate-Scout (Firstmate Subagent)
 - Prompt summary: "You are crewmate-scout. Conduct a deep research audit across the entire codebase... produce a comprehensive handover report for the Main Agent (Cursor) and First Mate."
 - Commit: d95954f
+
+## 2026-11-06 04:00 IST — 0G Private AI Inference Pipeline & Interactive Note Module
+- Files: scripts/test-inference-pipeline.mjs, app/src/components/InferenceNoteModule.tsx, app/src/app/page.tsx, package.json, app/package.json, .env, app/.env.local, AI_LOG.md
+- AI-generated: End-to-end 0G Private Computer (TEE) inference + 0G Storage Turbo pipeline (`scripts/test-inference-pipeline.mjs`); dedicated wallet generation (`0x52bA73109624Ff2b7c71CA13277Ff762d4Dc7701`) safely configured in local `.env` and `app/.env.local`; interactive Next.js UI component `InferenceNoteModule.tsx` supporting text/JSON software passport input and image file upload, live step-by-step pipeline stepper (TEE dispatch -> `X-Request-ID` extraction -> CROPS note attestation packaging -> 32-byte 0G Merkle Tree root calculation -> Turbo Indexer pinning); integrated into `app/src/app/page.tsx` with one-click direct query to Storage Station; zero compile errors on `npm run build`.
+- Human (shreyan): Requested building the complete inference note module (text/image upload -> 0G Private Computer TEE inference -> X-Request-ID extraction -> 0G Storage Turbo upload -> Merkle root return), standalone pipeline script, wallet handling via .env, frontend interactive module, and verification.
+- Tool / model: Crewmate-Inference (Firstmate Subagent)
+- Prompt summary: "Implement the complete end-to-end 0G Private Computer Inference + 0G Storage Pipeline module"
+- Commit: 93fc024
+
+
+## 2026-11-06 04:05 IST — Stage 3 Smart Contracts: InvoiceRegistry & Escrow Integration
+- Files: contracts/src/InvoiceRegistry.sol, contracts/src/SubscriptionEscrow.sol, contracts/test/InvoiceRegistry.t.sol, contracts/test/SubscriptionFlow.t.sol, contracts/script/DeployGalileo.s.sol, coordination-v2/STATUS.md, AI_LOG.md
+- AI-generated: Implemented InvoiceRegistry.sol with onlyEscrow minting, Invoice struct storing agreementId, period, amount, founder/subscriber addresses, heartbeatTx, and 0G Private Computer auditRequestId trace; wired automated receipt minting into SubscriptionEscrow.sol on period release; expanded Foundry test suite with 12 new tests in InvoiceRegistry.t.sol and updated SubscriptionFlow.t.sol (24/24 unit tests passing on Cancun EVM); updated DeployGalileo.s.sol to wire all 4 contracts on 0G Galileo.
+- Human (shreyan): Instructed shifting to smart contract development and technical infrastructure in parallel with AI inference pipeline.
+- Tool / model: Crewmate-Contracts (Firstmate Subagent)
+- Prompt summary: "Execute Stage 3 smart contract development on Stillworks: InvoiceRegistry.sol, wire into SubscriptionEscrow, write tests, update DeployGalileo.s.sol"
+- Commit: 93fc024

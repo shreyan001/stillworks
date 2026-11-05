@@ -4,6 +4,7 @@ pragma solidity 0.8.19;
 import {ProductRegistry} from "../src/ProductRegistry.sol";
 import {SubscriptionAgreement} from "../src/SubscriptionAgreement.sol";
 import {SubscriptionEscrow} from "../src/SubscriptionEscrow.sol";
+import {InvoiceRegistry} from "../src/InvoiceRegistry.sol";
 
 interface Vm {
     function warp(uint256) external;
@@ -18,6 +19,7 @@ contract SubscriptionFlowTest {
     ProductRegistry internal registry;
     SubscriptionAgreement internal agreement;
     SubscriptionEscrow internal escrow;
+    InvoiceRegistry internal invoiceRegistry;
 
     address internal founder = address(0x100);
     address internal steward = address(0x200);
@@ -42,6 +44,10 @@ contract SubscriptionFlowTest {
         registry = new ProductRegistry();
         agreement = new SubscriptionAgreement(address(registry));
         escrow = new SubscriptionEscrow(address(registry), address(agreement), steward);
+        invoiceRegistry = new InvoiceRegistry(address(escrow), steward);
+
+        vm.prank(steward);
+        escrow.setInvoiceRegistry(address(invoiceRegistry));
 
         // Fund test accounts
         vm.deal(founder, 10 ether);
@@ -155,6 +161,14 @@ contract SubscriptionFlowTest {
         require(esc.releasedPeriods == 1, "released period 1");
         require(esc.balance == 1 ether, "1 ether left in escrow");
 
+        // Verify InvoiceRegistry minted receipt
+        InvoiceRegistry.Invoice memory inv = invoiceRegistry.getInvoice(1);
+        require(inv.agreementId == agId, "invoice agreementId mismatch");
+        require(inv.period == 1, "invoice period mismatch");
+        require(inv.amount == PRICE_PER_PERIOD, "invoice amount mismatch");
+        require(inv.founder == founder, "invoice founder mismatch");
+        require(inv.subscriber == subscriber, "invoice subscriber mismatch");
+
         // Cannot release period 2 yet (heartbeat missing)
         vm.expectRevert(SubscriptionEscrow.HeartbeatMissing.selector);
         escrow.release(agId, 2);
@@ -201,5 +215,53 @@ contract SubscriptionFlowTest {
         // Cannot claim refund again
         vm.expectRevert(SubscriptionEscrow.AlreadyRefunded.selector);
         escrow.claimRefund(agId);
+    }
+
+    function testReleasePeriodWithHeartbeatAndAuditTrace() public {
+        vm.prank(subscriber);
+        uint256 agId = agreement.create(productId, PRICE_PER_PERIOD, PERIOD_LENGTH, GRACE_WINDOW);
+
+        vm.prank(subscriber);
+        escrow.fund{value: 2 ether}(agId, 2);
+
+        vm.prank(signer);
+        registry.heartbeat(productId, 1, STATUS_HASH);
+
+        bytes32 heartbeatTx = keccak256("galileo-heartbeat-tx-hash");
+        string memory auditTrace = "0g-pc-audit-req-123456";
+
+        // Release period 1 using releasePeriod with metadata
+        uint256 founderBefore = founder.balance;
+        vm.prank(stranger);
+        uint256 invoiceId = escrow.releasePeriod(agId, heartbeatTx, auditTrace);
+
+        require(invoiceId == 1, "invoiceId should be 1");
+        require(founder.balance == founderBefore + PRICE_PER_PERIOD, "founder paid");
+
+        InvoiceRegistry.Invoice memory inv = invoiceRegistry.getInvoice(invoiceId);
+        require(inv.agreementId == agId, "inv agId");
+        require(inv.period == 1, "inv period");
+        require(inv.amount == PRICE_PER_PERIOD, "inv amount");
+        require(inv.founder == founder, "inv founder");
+        require(inv.subscriber == subscriber, "inv subscriber");
+        require(inv.heartbeatTx == heartbeatTx, "inv heartbeatTx");
+        require(
+            keccak256(bytes(inv.auditRequestId)) == keccak256(bytes(auditTrace)),
+            "inv auditRequestId"
+        );
+    }
+
+    function testSetInvoiceRegistryAccessControl() public {
+        address mockRegistry = address(0x999);
+
+        // Stranger cannot update invoiceRegistry
+        vm.prank(stranger);
+        vm.expectRevert(SubscriptionEscrow.NotSteward.selector);
+        escrow.setInvoiceRegistry(mockRegistry);
+
+        // Steward can update invoiceRegistry
+        vm.prank(steward);
+        escrow.setInvoiceRegistry(mockRegistry);
+        require(address(escrow.invoiceRegistry()) == mockRegistry, "invoiceRegistry updated");
     }
 }

@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test:storage": "node ../scripts/test-storage-baseline.mjs"
+    "test:storage": "node ../scripts/test-storage-baseline.mjs",
+    "test:inference": "node ../scripts/test-inference-pipeline.mjs"
   },
   "dependencies": {
     "@0gfoundation/0g-storage-ts-sdk": "^1.2.13",

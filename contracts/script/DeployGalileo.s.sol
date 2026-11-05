@@ -4,6 +4,7 @@ pragma solidity 0.8.19;
 import {ProductRegistry} from "../src/ProductRegistry.sol";
 import {SubscriptionAgreement} from "../src/SubscriptionAgreement.sol";
 import {SubscriptionEscrow} from "../src/SubscriptionEscrow.sol";
+import {InvoiceRegistry} from "../src/InvoiceRegistry.sol";
 
 interface Vm {
     function startBroadcast() external;
@@ -21,8 +22,9 @@ contract DeployGalileo {
     ProductRegistry public registry;
     SubscriptionAgreement public agreement;
     SubscriptionEscrow public escrow;
+    InvoiceRegistry public invoiceRegistry;
 
-    function run() external returns (address registryAddr, address agreementAddr, address escrowAddr) {
+    function run() external returns (address registryAddr, address agreementAddr, address escrowAddr, address invoiceRegistryAddr) {
         uint256 deployerKey = vm.envOr("PRIVATE_KEY", uint256(0));
         if (deployerKey == 0) {
             deployerKey = vm.envOr("DEPLOYER_PRIVATE_KEY", uint256(0));
@@ -46,6 +48,13 @@ contract DeployGalileo {
         // Default steward set to msg.sender (deployer)
         escrow = new SubscriptionEscrow(registryAddr, agreementAddr, msg.sender);
         escrowAddr = address(escrow);
+
+        // 4. Deploy InvoiceRegistry (non-transferable receipts for escrow releases)
+        invoiceRegistry = new InvoiceRegistry(escrowAddr, msg.sender);
+        invoiceRegistryAddr = address(invoiceRegistry);
+
+        // 5. Wire InvoiceRegistry into SubscriptionEscrow
+        escrow.setInvoiceRegistry(invoiceRegistryAddr);
 
         vm.stopBroadcast();
     }

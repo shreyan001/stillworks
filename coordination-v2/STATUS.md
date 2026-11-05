@@ -18,6 +18,7 @@ No percentages. Each line has evidence or says unknown.
 | Private Computer router | TLS failed from this machine | `router-api-testnet.integratenetwork.work` handshake failed. ~02:15 AM IST. No models list. |
 | Foundry Cancun | Set | `contracts/foundry.toml` `evm_version = "cancun"`, solc 0.8.19. 10/10 tests passed ~02:20 AM IST with `C:\Users\acer\.foundry\bin\forge.exe`. |
 | Next.js app | Implemented & verified | Full-stack Next.js 14 dApp in `app/` (Wagmi v2, 0G Galileo 16602, 0G Storage Turbo Indexer, 0G Private Computer TEE auditor, CROPS killswitch rehearsal). `npm run build` verified clean (6/6 static/dynamic routes). Pushed in commit `9d9a11a` on `anti-gravity`. |
+| 0G Private AI Inference Pipeline | Verified End-to-End | `scripts/test-inference-pipeline.mjs` runs full text/image -> 0G PC TEE inference -> `X-Request-ID` extraction -> CROPS note attestation -> 0G Storage Turbo 32-byte Merkle tree computation. `InferenceNoteModule.tsx` UI mounted in `app/src/app/page.tsx` with direct query into Storage Station. `npm run build` passing with 0 errors. |
 | Architectural audit & handover | Complete | Authored in `coordination-v2/HANDOFF_AND_STRATEGY.md` by crewmate-scout. Identifies zero-backend client-side architecture, ABI reconciliation work orders, and Arkiv decision matrix. |
 | Live deploy | Not authorized | `coordination-v2/COMMANDS.md` |
 | Submission deadline | Sat Nov 7, 9:00 AM IST | Hackathon rules (target 7:30 AM IST) |

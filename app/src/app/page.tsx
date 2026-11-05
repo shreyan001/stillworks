@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { WalletButton } from '@/components/WalletButton';
+import { InferenceNoteModule } from '@/components/InferenceNoteModule';
 import { MemData, Indexer } from '@0gfoundation/0g-storage-ts-sdk';
 import {
   Database,
@@ -18,6 +19,8 @@ import {
   ArrowRight,
   AlertCircle,
   Sparkles,
+  Cpu,
+  Layers,
 } from 'lucide-react';
 
 const INDEXER_URL = 'https://indexer-storage-testnet-turbo.0g.ai';
@@ -25,6 +28,7 @@ const DEMO_TESTNET_HASH = '0xf004c8fb08c6c208a40320d96901b737f62d7e9ed2505f33498
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
+  const [activeTab, setActiveTab] = useState<'pipeline' | 'storage' | 'all'>('pipeline');
 
   // Section 1: Storage Export State
   const [exportInput, setExportInput] = useState(() =>
@@ -167,6 +171,12 @@ export default function Home() {
     }
   };
 
+  const handleDirectQueryFromPipeline = (rootHash: string) => {
+    setActiveTab('storage');
+    setImportHash(rootHash);
+    handleFetchImport(rootHash);
+  };
+
   if (!mounted) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
@@ -210,7 +220,60 @@ export default function Home() {
         </div>
       </header>
 
-      {/* SECTION 1: STORAGE EXPORT */}
+      {/* TABS NAVIGATION */}
+      <div className="flex flex-wrap items-center gap-2 border-b border-zerog-border pb-3">
+        <button
+          onClick={() => setActiveTab('pipeline')}
+          className={`px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+            activeTab === 'pipeline'
+              ? 'bg-zerog-purple text-white shadow-lg shadow-zerog-purple/20'
+              : 'bg-black/40 hover:bg-black/60 text-slate-400 hover:text-white border border-zerog-border'
+          }`}
+        >
+          <Cpu className="w-4 h-4 text-purple-300" />
+          <span>0G Private AI Pipeline</span>
+          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/40 text-purple-200 border border-purple-400/20">
+            TEE Enclave
+          </span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('storage')}
+          className={`px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+            activeTab === 'storage'
+              ? 'bg-zerog-purple text-white shadow-lg shadow-zerog-purple/20'
+              : 'bg-black/40 hover:bg-black/60 text-slate-400 hover:text-white border border-zerog-border'
+          }`}
+        >
+          <Database className="w-4 h-4 text-purple-300" />
+          <span>0G Storage Station</span>
+          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/40 text-slate-300 border border-slate-700">
+            Turbo Export &amp; Import
+          </span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('all')}
+          className={`px-3 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+            activeTab === 'all'
+              ? 'bg-zerog-purple text-white shadow-lg shadow-zerog-purple/20'
+              : 'bg-black/40 hover:bg-black/60 text-slate-400 hover:text-white border border-zerog-border'
+          }`}
+        >
+          <Layers className="w-3.5 h-3.5" />
+          <span>All Modules</span>
+        </button>
+      </div>
+
+      {/* TAB 1: 0G PRIVATE AI PIPELINE */}
+      {(activeTab === 'pipeline' || activeTab === 'all') && (
+        <InferenceNoteModule onDirectQuery={handleDirectQueryFromPipeline} />
+      )}
+
+      {/* TAB 2: STORAGE STATION (SECTIONS 1 & 2) */}
+      {(activeTab === 'storage' || activeTab === 'all') && (
+        <>
+          {/* SECTION 1: STORAGE EXPORT */}
       <section className="bg-zerog-cardBg border border-zerog-border rounded-2xl p-6 shadow-lg space-y-5">
         <div className="flex items-center justify-between border-b border-zerog-border/80 pb-4">
           <div className="flex items-center gap-2.5">
@@ -432,6 +495,8 @@ export default function Home() {
           </div>
         )}
       </section>
+        </>
+      )}
     </div>
   );
 }

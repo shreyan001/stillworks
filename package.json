@@ -2,7 +2,8 @@
   "name": "stillworks",
   "private": true,
   "scripts": {
-    "test:storage": "node scripts/test-storage-baseline.mjs"
+    "test:storage": "node scripts/test-storage-baseline.mjs",
+    "test:inference": "node scripts/test-inference-pipeline.mjs"
   },
   "dependencies": {
     "@0gfoundation/0g-compute-ts-sdk": "^0.9.0",

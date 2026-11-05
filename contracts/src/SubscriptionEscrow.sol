@@ -3,16 +3,7 @@ pragma solidity 0.8.19;
 
 import {ProductRegistry} from "./ProductRegistry.sol";
 import {SubscriptionAgreement} from "./SubscriptionAgreement.sol";
-
-interface IInvoiceRegistry {
-    function mint(
-        uint256 agreementId,
-        uint256 period,
-        bytes32 heartbeatTx,
-        bytes32 auditRequestId,
-        uint256 amount
-    ) external returns (uint256 invoiceId);
-}
+import {InvoiceRegistry} from "./InvoiceRegistry.sol";
 
 /// @notice Bilateral escrow: funds locked upfront, released per attested period,
 ///         pro-rata refund claimed immediately when founder misses heartbeat past grace window.
@@ -26,7 +17,7 @@ contract SubscriptionEscrow {
 
     ProductRegistry public immutable registry;
     SubscriptionAgreement public immutable agreementContract;
-    address public invoiceRegistry;
+    InvoiceRegistry public invoiceRegistry;
     address public steward;
 
     mapping(uint256 => EscrowState) private _escrows;
@@ -71,7 +62,7 @@ contract SubscriptionEscrow {
 
     function setInvoiceRegistry(address _invoiceRegistry) external {
         if (msg.sender != steward) revert NotSteward();
-        invoiceRegistry = _invoiceRegistry;
+        invoiceRegistry = InvoiceRegistry(_invoiceRegistry);
         emit InvoiceRegistryUpdated(_invoiceRegistry);
     }
 
@@ -100,8 +91,43 @@ contract SubscriptionEscrow {
         emit Funded(agreementId, periods, requiredAmount, esc.fundedPeriods);
     }
 
+    /// @notice Anyone can trigger release of the next sequential period for an agreement
+    function releasePeriod(uint256 agreementId) external nonReentrant returns (uint256 invoiceId) {
+        EscrowState storage esc = _escrows[agreementId];
+        return _release(agreementId, esc.releasedPeriods + 1, bytes32(0), "");
+    }
+
+    /// @notice Releases the next sequential period with heartbeatTx and auditRequestId metadata
+    function releasePeriod(
+        uint256 agreementId,
+        bytes32 heartbeatTx,
+        string calldata auditRequestId
+    ) external nonReentrant returns (uint256 invoiceId) {
+        EscrowState storage esc = _escrows[agreementId];
+        return _release(agreementId, esc.releasedPeriods + 1, heartbeatTx, auditRequestId);
+    }
+
     /// @notice Anyone can trigger release of 1 period to founder after heartbeat is attested
-    function release(uint256 agreementId, uint256 period) external nonReentrant {
+    function release(uint256 agreementId, uint256 period) external nonReentrant returns (uint256 invoiceId) {
+        return _release(agreementId, period, bytes32(0), "");
+    }
+
+    /// @notice Release a specific period with heartbeatTx and auditRequestId metadata
+    function release(
+        uint256 agreementId,
+        uint256 period,
+        bytes32 heartbeatTx,
+        string calldata auditRequestId
+    ) external nonReentrant returns (uint256 invoiceId) {
+        return _release(agreementId, period, heartbeatTx, auditRequestId);
+    }
+
+    function _release(
+        uint256 agreementId,
+        uint256 period,
+        bytes32 heartbeatTx,
+        string memory auditRequestId
+    ) internal returns (uint256 invoiceId) {
         EscrowState storage esc = _escrows[agreementId];
         if (esc.refunded) revert AlreadyRefunded();
 
@@ -121,14 +147,16 @@ contract SubscriptionEscrow {
 
         emit Released(agreementId, period, ag.pricePerPeriod, prod.founder);
 
-        if (invoiceRegistry != address(0)) {
-            try IInvoiceRegistry(invoiceRegistry).mint(
+        if (address(invoiceRegistry) != address(0)) {
+            invoiceId = invoiceRegistry.mint(
                 agreementId,
                 period,
-                bytes32(0),
-                bytes32(0),
-                ag.pricePerPeriod
-            ) {} catch {}
+                ag.pricePerPeriod,
+                prod.founder,
+                ag.subscriber,
+                heartbeatTx,
+                auditRequestId
+            );
         }
     }
 
