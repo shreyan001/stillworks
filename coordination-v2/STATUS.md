@@ -1,21 +1,24 @@
-# STATUS — evidence only (last update Thu Nov 5, ~11:40 PM IST)
+# STATUS — evidence only (last update Fri Nov 6, ~01:35 AM IST)
 
 No percentages. Each line has evidence or says unknown.
 
 | Item | State | Evidence |
 |---|---|---|
-| Repo created | Confirmed | shreyan, Nov 5 11:28 PM IST (URL not recorded) |
-| Implementation of any kind | None confirmed | shreyan, Nov 5 11:28 PM IST |
-| Product design / segmentation | Not done; earlier docs are proposals | CONTEXT_MAP.md |
-| Lead agent session | Not started | — |
-| Accounts, keys, faucets, credits | Unknown | not confirmed by shreyan |
-| firstmate / lavish-axi installed | Unknown | — |
-| Submission deadline | Sat Nov 7, 9:00 AM IST (reported) | brief; re-check on ETHGlobal dashboard |
+| Repo created | Confirmed | `https://github.com/shreyan001/stillworks`, pushed commits `ee32d99`, `5168a96`, `b9d50e3` |
+| Core contracts | Implemented | `ProductRegistry.sol`, `SubscriptionAgreement.sol`, `SubscriptionEscrow.sol` |
+| Unit tests | 10/10 Passing | `contracts/test/ProductRegistry.t.sol` (4), `contracts/test/SubscriptionFlow.t.sol` (6) |
+| Galileo deploy script | Implemented | `contracts/script/DeployGalileo.s.sol` compiled with solc 0.8.19 |
+| Multi-agent architecture | Active | 3 Agent Pages created: `cursor`, `anti-gravity`, `freebuf` |
+| Primary coordination point | Cursor Agent | Defined in `coordination-v2/agents/cursor.md` |
+| Accounts, keys, faucets, credits | Separate concern | Faucets / testing tokens deferred per Captain instruction |
+| Submission deadline | Sat Nov 7, 9:00 AM IST | Hackathon rules (target 7:30 AM IST) |
+
+## Active Agent Branches & Roles
+- **`cursor`:** Lead coordination agent and architectural clearinghouse.
+- **`anti-gravity`:** Deployment & infrastructure agent (Galileo deployment script owner).
+- **`freebuf`:** Protocol security audit, 0G PC inference harness, and off-chain data integrity.
 
 ## Decisions
-None recorded under DECISION_PROTOCOL.md yet.
-
-## Contradictions open
-- Earlier packs claimed design complete / stage progress — contradicted by shreyan (11:28 PM IST). Earlier packs are historical.
-- 0G Storage npm name: docs say `@0gfoundation/0g-storage-ts-sdk`, starter kit says `@0gfoundation/0g-ts-sdk` (reference/0G_FACTS.md).
-- 0G deployment-scripts README says chain 16601; current Galileo docs say 16602.
+- Nov 6 01:23 IST: Repo URL confirmed as `https://github.com/shreyan001/stillworks` (shreyan).
+- Nov 6 01:32 IST: Three separate agent branches established (`cursor`, `anti-gravity`, `freebuf`) with Cursor as central coordination point (shreyan).
+- Nov 6 01:32 IST: Testing tokens and live chain deployment deferred while focus is placed on the three agent workspaces and iterative smart contract lifecycle (shreyan).
