@@ -1,0 +1,156 @@
+export const PRODUCT_REGISTRY_ABI = [
+  {
+    type: 'function',
+    name: 'register',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'name', type: 'string' },
+      { name: 'passportRoot', type: 'bytes32' },
+      { name: 'signer', type: 'address' },
+      { name: 'heartbeatInterval', type: 'uint256' },
+    ],
+    outputs: [{ name: '', type: 'uint256' }],
+  },
+  {
+    type: 'function',
+    name: 'heartbeat',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'productId', type: 'uint256' },
+      { name: 'seq', type: 'uint256' },
+      { name: 'proof', type: 'bytes' },
+    ],
+    outputs: [],
+  },
+  {
+    type: 'function',
+    name: 'isAlive',
+    stateMutability: 'view',
+    inputs: [{ name: 'productId', type: 'uint256' }],
+    outputs: [{ name: '', type: 'bool' }],
+  },
+  {
+    type: 'function',
+    name: 'products',
+    stateMutability: 'view',
+    inputs: [{ name: '', type: 'uint256' }],
+    outputs: [
+      { name: 'founder', type: 'address' },
+      { name: 'steward', type: 'address' },
+      { name: 'signer', type: 'address' },
+      { name: 'name', type: 'string' },
+      { name: 'passportRoot', type: 'bytes32' },
+      { name: 'proposedRoot', type: 'bytes32' },
+      { name: 'heartbeatInterval', type: 'uint256' },
+      { name: 'lastHeartbeat', type: 'uint256' },
+      { name: 'heartbeatSeq', type: 'uint256' },
+      { name: 'active', type: 'bool' },
+    ],
+  },
+  {
+    type: 'function',
+    name: 'productCount',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ name: '', type: 'uint256' }],
+  },
+] as const;
+
+export const SUBSCRIPTION_AGREEMENT_ABI = [
+  {
+    type: 'function',
+    name: 'createAgreement',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'productId', type: 'uint256' },
+      { name: 'pricePerPeriod', type: 'uint256' },
+      { name: 'periodDuration', type: 'uint256' },
+      { name: 'gracePeriod', type: 'uint256' },
+    ],
+    outputs: [{ name: '', type: 'uint256' }],
+  },
+  {
+    type: 'function',
+    name: 'requestWalkaway',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'agreementId', type: 'uint256' },
+      { name: 'walkawayRoot', type: 'bytes32' },
+    ],
+    outputs: [],
+  },
+  {
+    type: 'function',
+    name: 'agreements',
+    stateMutability: 'view',
+    inputs: [{ name: '', type: 'uint256' }],
+    outputs: [
+      { name: 'productId', type: 'uint256' },
+      { name: 'subscriber', type: 'address' },
+      { name: 'pricePerPeriod', type: 'uint256' },
+      { name: 'periodDuration', type: 'uint256' },
+      { name: 'gracePeriod', type: 'uint256' },
+      { name: 'walkawayRoot', type: 'bytes32' },
+      { name: 'active', type: 'bool' },
+      { name: 'createdAt', type: 'uint256' },
+    ],
+  },
+  {
+    type: 'function',
+    name: 'agreementCount',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ name: '', type: 'uint256' }],
+  },
+] as const;
+
+export const SUBSCRIPTION_ESCROW_ABI = [
+  {
+    type: 'function',
+    name: 'fund',
+    stateMutability: 'payable',
+    inputs: [
+      { name: 'agreementId', type: 'uint256' },
+      { name: 'periods', type: 'uint256' },
+    ],
+    outputs: [],
+  },
+  {
+    type: 'function',
+    name: 'releasePeriod',
+    stateMutability: 'nonpayable',
+    inputs: [{ name: 'agreementId', type: 'uint256' }],
+    outputs: [],
+  },
+  {
+    type: 'function',
+    name: 'claimRefund',
+    stateMutability: 'nonpayable',
+    inputs: [{ name: 'agreementId', type: 'uint256' }],
+    outputs: [],
+  },
+  {
+    type: 'function',
+    name: 'calculateRefund',
+    stateMutability: 'view',
+    inputs: [{ name: 'agreementId', type: 'uint256' }],
+    outputs: [{ name: '', type: 'uint256' }],
+  },
+  {
+    type: 'function',
+    name: 'escrows',
+    stateMutability: 'view',
+    inputs: [{ name: '', type: 'uint256' }],
+    outputs: [
+      { name: 'agreementId', type: 'uint256' },
+      { name: 'totalDeposited', type: 'uint256' },
+      { name: 'totalReleased', type: 'uint256' },
+      { name: 'releasedPeriods', type: 'uint256' },
+      { name: 'fundedPeriods', type: 'uint256' },
+      { name: 'subscriber', type: 'address' },
+      { name: 'founder', type: 'address' },
+      { name: 'lastReleaseTime', type: 'uint256' },
+      { name: 'refunded', type: 'bool' },
+    ],
+  },
+] as const;

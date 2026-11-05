@@ -5,11 +5,20 @@ The store where you subscribe to open tools that publish a live passport and hea
 Built at ETHGlobal Mumbai 2026 (From Scratch). Stack: 0G Chain (ProductRegistry, SubscriptionAgreement, SubscriptionEscrow, InvoiceRegistry), 0G Storage (passports, frontend, walkaway bundles), 0G Private Computer (passport audit with request IDs), Arkiv (passport discovery, stretch).
 
 ## How to run
-_TODO — filled in during the build._
-```
+
+### 1. Smart Contracts
+```bash
 forge build && forge test   # contracts/
-pnpm i && pnpm dev           # app/
 ```
+
+### 2. Full-Stack 0G dApp (Next.js + Wagmi + 0G Storage + 0G Compute)
+```bash
+cd app
+npm install
+cp .env.local.example .env.local
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) to interact with the sovereign store, run TEE audits on 0G Private Computer, explore 0G Storage Turbo Merkle roots, and rehearse the CROPS escrow killswitch.
 
 ## CROPS
 - **C — Censorship resistant:** We control the domain, a static frontend and an optional indexer. If any disappears, the frontend is pinned on 0G Storage, contracts are on 0G Chain, and your walkaway bundle and refund claim work from any RPC.

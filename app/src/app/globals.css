@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 240, 240, 245;
+  --background-start-rgb: 11, 11, 20;
+  --background-end-rgb: 7, 7, 13;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+@layer utilities {
+  .glow-purple {
+    box-shadow: 0 0 25px -5px rgba(183, 95, 255, 0.3);
+  }
+}

@@ -92,3 +92,11 @@ Format:
 - Tool / model: Cursor agent (Grok 4.7)
 - Prompt summary: "settle them and install with the base template, push, and merge to main"
 - Commit: cce13b8
+
+## 2026-11-06 03:05 IST — Full-stack 0G dApp template (Next.js, Wagmi, 0G Storage, 0G Compute)
+- Files: app/package.json, app/tsconfig.json, app/next.config.mjs, app/tailwind.config.ts, app/postcss.config.js, app/.env.local.example, app/src/lib/chains/zeroG.ts, app/src/lib/wagmi.ts, app/src/lib/contracts/abis.ts, app/src/lib/zerog/storage.ts, app/src/lib/zerog/compute.ts, app/src/app/api/storage/upload/route.ts, app/src/app/api/compute/audit/route.ts, app/src/app/globals.css, app/src/app/providers.tsx, app/src/app/layout.tsx, app/src/app/page.tsx, app/src/components/*, app/README.md, README.md, AI_LOG.md
+- AI-generated: Scaffolding of complete full-stack Next.js dApp integrating 0G Galileo Chain (16602), 0G Storage Turbo Indexer (`@0gfoundation/0g-storage-ts-sdk` + `ethers@6.13.1`), 0G Private Computer TEE compliance auditing with `X-Request-ID` extraction, Wagmi wallet connection, and CROPS escrow killswitch rehearsal UI.
+- Human (shreyan): Requested building the main 0G dApp template recipe (Next.js, 0G Chain, 0G Storage, 0G Compute, Wagmi) and maintaining documentation.
+- Tool / model: Firstmate (Antigravity)
+- Prompt summary: "now let us deal with the main recipe to build , maintain a good readme add the whole website template of 0g as specified... Build a full-stack AI dApp on 0G using Next.js. Connect to 0G Chain for transactions, 0G Storage for data persistence, and 0G Compute for AI inference. Include wallet connection with wagmi."
+- Commit: 0f90b09
