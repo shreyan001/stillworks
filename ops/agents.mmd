@@ -1,0 +1,21 @@
+flowchart TD
+  S[shreyan - captain<br/>decides, keys, video, submit]
+  T[tasky - task coordinator<br/>owns TASKS.md]
+  R[Web3 Idea Researcher<br/>data room, links, prize rules]
+  P[plan and organize<br/>hourly progress % ping]
+  F[firstmate - first mate agent<br/>spawns + supervises crew]
+  C1[Cursor coding agent<br/>contracts]
+  C2[crewmate<br/>frontend]
+  C3[crewmate<br/>0G PC / Storage / Arkiv]
+  L[lavish-axi<br/>visual review of plans/diagrams]
+  G[(GitHub repo stillworks<br/>commits + AI_LOG.md)]
+  S --> T
+  S <--> F
+  T --> F
+  R --> T
+  P --> S
+  P -.reads.-> G
+  F --> C1 & C2 & C3
+  C1 & C2 & C3 --> G
+  F --> L
+  L --> S

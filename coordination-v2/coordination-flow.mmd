@@ -1,0 +1,19 @@
+flowchart TD
+  H((shreyan<br/>decides))
+  L((Lead agent<br/>any strong model))
+  C[Context sources<br/>CONTEXT_MAP]
+  D[Discovery<br/>capabilities, unknowns, dependencies]
+  Q{Consequential?}
+  R[Bounded research<br/>RESEARCH_PROTOCOL]
+  W[Work order<br/>approved by shreyan]
+  A((Other agents<br/>Gemini / Cursor CLI))
+  V[Lead verifies<br/>acceptance]
+  S[(STATUS / DECISION_LOG / HANDOFF)]
+  C --> L --> D --> Q
+  Q -- yes: one question --> H
+  Q -- no: log it --> S
+  H -- decision --> S
+  D -- unknown --> R --> L
+  S --> W
+  H -- approves --> W --> A --> V --> S
+  S --> L

@@ -1,0 +1,22 @@
+flowchart LR
+  U[Subscriber wallet<br/>keys on device]
+  FE[Static frontend<br/>pinned on 0G Storage]
+  PC[0G Private Computer<br/>passport audit, request ID]
+  ST[(0G Storage<br/>passport, frontend, walkaway bundles)]
+  subgraph CH[0G Chain - Galileo 16602]
+    PR[ProductRegistry]
+    SA[SubscriptionAgreement]
+    SE[SubscriptionEscrow]
+    IR[InvoiceRegistry]
+  end
+  AK[(Arkiv Rabdi<br/>passport mirror, discovery query)]
+  HB[Founder heartbeat bot]
+  U --> FE
+  FE --> ST
+  FE --> PC
+  FE --> PR
+  PR --> SA --> SE --> IR
+  PC -. requestId .-> IR
+  HB --> PR
+  FE -. stretch .-> AK
+  SE -. walkawayRoot .-> ST
