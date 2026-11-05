@@ -150,3 +150,11 @@ Format:
 - Tool / model: scout-zerog-capabilities (Firstmate Subagent)
 - Prompt summary: "You are scout-zerog-capabilities. Conduct deep research into the 0G ecosystem capabilities and hard boundaries..."
 - Commit: 21c8322
+
+## 2026-11-06 04:35 IST — Fix Next.js Dev Server Chunk Collision & Add not-found.tsx
+- Files: app/next.config.mjs, app/src/app/not-found.tsx, AI_LOG.md
+- AI-generated: Resolved Next.js dev server chunk missing error (`Cannot find module './884.js'` and 500 fallback errors) by making `output: 'export'` conditional on `process.env.NODE_ENV === 'production'`; created explicit `app/src/app/not-found.tsx` to prevent internal webpack error synthesis; verified `npm run clean && npm run build` passes with 0 errors.
+- Human (shreyan): Reported runtime stack trace error with missing `./884.js` module in `next dev`.
+- Tool / model: Firstmate (Antigravity)
+- Prompt summary: "at async invokeRender... code: 'MODULE_NOT_FOUND', requireStack... Error: Cannot find module './884.js'"
+- Commit: 9ae924b

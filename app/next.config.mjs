@@ -1,6 +1,9 @@
+const isProd = process.env.NODE_ENV === 'production';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // Only apply static export for production builds, allowing dev server (next dev) to run dynamically with hot reload
+  ...(isProd ? { output: 'export' } : {}),
   reactStrictMode: true,
   images: {
     unoptimized: true,
@@ -21,4 +24,3 @@ const nextConfig = {
 };
 
 export default nextConfig;
-
