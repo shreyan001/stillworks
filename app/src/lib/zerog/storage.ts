@@ -31,6 +31,10 @@ export async function uploadToZeroGStorage(
   let zgFile: any = null;
   try {
     zgFile = await ZgFile.fromFilePath(tempFilePath);
+    const [tree, treeErr] = await zgFile.merkleTree();
+    if (treeErr || !tree) {
+      throw new Error(`0G Storage merkle tree failed: ${String(treeErr)}`);
+    }
     const [result, error] = await indexer.upload(zgFile, chainRpc, signer);
 
     if (error) {

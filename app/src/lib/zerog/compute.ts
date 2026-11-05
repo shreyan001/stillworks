@@ -10,8 +10,11 @@ export async function runZeroGComputeAudit(
   productName: string,
   passportData: Record<string, any>
 ): Promise<ComputeAuditResult> {
-  const routerUrl = process.env.ZEROG_COMPUTE_ROUTER_URL || 'https://router-api-testnet.integratenetwork.work/v1';
-  const apiKey = process.env.ZEROG_PC_API_KEY || 'demo-key';
+  const routerUrl = process.env.ZEROG_COMPUTE_ROUTER_URL || 'https://router-api.0g.ai/v1';
+  const apiKey = process.env.ZEROG_PC_API_KEY;
+  if (!apiKey) {
+    throw new Error('ZEROG_PC_API_KEY is required for 0G inference');
+  }
 
   const systemPrompt = `You are the 0G Private Computer Compliance & CROPS Auditor. 
 Audit this software passport for:
@@ -45,25 +48,28 @@ Return a JSON object with:
           { role: 'user', content: userContent },
         ],
         temperature: 0.2,
+        max_tokens: 800,
       }),
     });
 
-    const requestId = res.headers.get('x-request-id') || 
-                      res.headers.get('ZG-Res-Key') || 
-                      `0g-audit-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    const data = await res.json().catch(() => ({}));
+    const requestId = data?.x_0g_trace?.request_id
+      || data?.request_id
+      || res.headers.get('x-request-id')
+      || res.headers.get('ZG-Res-Key')
+      || '';
 
     if (!res.ok) {
-      // In local dev without funded API key, generate verifiable cryptographic simulation
+      const message = data?.error?.message || data?.error || res.statusText;
       return {
         requestId,
-        verdict: 'COMPLIANT',
-        score: 96,
-        report: `[Verified via 0G TEE Simulator] Product "${productName}" satisfies CROPS standards: Decentralized 0G Storage Merkle root confirmed, escrow timeout conditions active, zero tracker telemetry observed.`,
-        model: '0gm-1.0-35b-a3b (TEE-Attested)',
+        verdict: 'WARNING',
+        score: 0,
+        report: `0G router returned ${res.status}: ${String(message).slice(0, 400)}`,
+        model: '0gm-1.0-35b-a3b',
       };
     }
 
-    const data = await res.json();
     const content = data.choices?.[0]?.message?.content || '';
     
     try {
@@ -76,23 +82,31 @@ Return a JSON object with:
         model: data.model || '0gm-1.0-35b-a3b',
       };
     } catch {
+      if (!content.trim()) {
+        return {
+          requestId,
+          verdict: 'WARNING',
+          score: 0,
+          report: '0G router returned an empty audit.',
+          model: data.model || '0gm-1.0-35b-a3b',
+        };
+      }
       return {
         requestId,
         verdict: 'COMPLIANT',
         score: 92,
-        report: content || 'Audit completed successfully.',
+        report: content,
         model: data.model || '0gm-1.0-35b-a3b',
       };
     }
   } catch (error) {
-    // Graceful offline fallback with synthetic request ID for demonstration
-    const fallbackId = `0g-pc-mock-${Date.now()}`;
+    const message = error instanceof Error ? error.message : String(error);
     return {
-      requestId: fallbackId,
-      verdict: 'COMPLIANT',
-      score: 94,
-      report: `[Local Attestation Mode] Audited "${productName}". Cryptographic heartbeat intervals validated against 0G Chain rules. Escrow refund trigger operational upon 1 missed period.`,
-      model: '0gm-1.0-35b-a3b (Local Mode)',
+      requestId: '',
+      verdict: 'WARNING',
+      score: 0,
+      report: `0G inference did not complete: ${message}`,
+      model: '0gm-1.0-35b-a3b',
     };
   }
 }

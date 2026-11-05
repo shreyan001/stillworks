@@ -158,3 +158,11 @@ Format:
 - Tool / model: Firstmate (Antigravity)
 - Prompt summary: "at async invokeRender... code: 'MODULE_NOT_FOUND', requireStack... Error: Cannot find module './884.js'"
 - Commit: 9ae924b
+
+## 2026-11-06 05:30 IST — point the app at the working 0G router
+- Files: app/src/lib/zerog/compute.ts, app/src/lib/zerog/storage.ts, AI_LOG.md
+- AI-generated: inference uses https://router-api.0g.ai/v1 and returns the real router error instead of a fake COMPLIANT score; storage builds the Merkle tree before upload
+- Human (shreyan): asked to merge anti-gravity into main and repair the keys so the app can run
+- Tool / model: Cursor agent (Grok 4.7)
+- Prompt summary: "merge anti-gravity into main and repair the platform so it operates minimally"
+- Commit: (pending commit)
