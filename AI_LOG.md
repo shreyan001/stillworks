@@ -27,7 +27,7 @@ Format:
 - Human (shreyan): asked to install those skills in Cursor globally, then ran /stow
 - Tool / model: Cursor agent
 - Prompt summary: "/stow what does this skill do"
-- Commit: not committed
+- Commit: 83c12fd
 
 ## 2026-11-05 23:45 IST — firstmate skills native to Cursor
 - Files: ops/SYSTEM.md; machine-global `~/.agents/skills/` (firstmate entry + 27 copied skills; not in Stillworks repo)
@@ -35,7 +35,7 @@ Format:
 - Human (shreyan): asked to make firstmate native urgently
 - Tool / model: Cursor agent
 - Prompt summary: "now complete as much as you want"
-- Commit: not committed
+- Commit: 83c12fd
 
 ## 2026-11-06 01:00 IST — ProductRegistry v0
 - Files: contracts/foundry.toml, contracts/src/ProductRegistry.sol, contracts/test/ProductRegistry.t.sol, contracts/README.md, .gitignore
@@ -43,7 +43,7 @@ Format:
 - Human (shreyan): asked to stop planning and make the contract real; has not edited this code yet
 - Tool / model: Cursor agent (Grok 4.7)
 - Prompt summary: "work is not moving; make progress on the smart contract"
-- Commit: not committed
+- Commit: 83c12fd
 
 ## 2026-11-06 01:25 IST — Firstmate initialization & git baseline
 - Files: .git, .gitignore, coordination-v2/ (cleaned duplicate), AI_LOG.md
@@ -174,4 +174,4 @@ Format:
 - Human (shreyan): Provided terminal screenshot of Next.js dev server 404s, requested backend storage evaluation for CROPS, clarification on Arkiv vs Chainlink CRE, and independent agent run through heartbeat checkpoint.
 - Tool / model: Firstmate (Antigravity)
 - Prompt summary: "At this point, we need to evaluate the appropriate backend storage system... What steps should we take to create a perfect crop system?... run an independent agent through the system to reach the heartbeat"
-- Commit: not committed
+- Commit: 83c12fd
