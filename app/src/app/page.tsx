@@ -1,543 +1,497 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { WalletButton } from '@/components/WalletButton';
-import { InferenceNoteModule } from '@/components/InferenceNoteModule';
-import { AgentPassModule } from '@/components/AgentPassModule';
-import { UpkeepMonitor } from '@/components/UpkeepMonitor';
-import { MemData, Indexer } from '@0gfoundation/0g-storage-ts-sdk';
-import {
-  Database,
-  Upload,
-  Download,
-  CheckCircle2,
-  Copy,
-  Check,
-  RefreshCw,
-  FileCode2,
-  Hash,
-  ShieldCheck,
-  ExternalLink,
-  ArrowRight,
-  AlertCircle,
-  Sparkles,
-  Cpu,
-  Layers,
-} from 'lucide-react';
+import Link from 'next/link';
+import { products as initialProducts, type Product } from '@/data/products';
+import rawSnapshot from '@/data/live-snapshot.json';
+import { SandboxModal } from '@/components/SandboxModal';
 
-const INDEXER_URL = 'https://indexer-storage-testnet-turbo.0g.ai';
-const DEMO_TESTNET_HASH = '0xf004c8fb08c6c208a40320d96901b737f62d7e9ed2505f3349861c3f606987e2';
+const snapshot = rawSnapshot as {
+  timestamp: string | null;
+  snapshotRoot: string | null;
+  inference: { text: string; requestId: string; model: string; trust: string } | null;
+};
 
-export default function Home() {
-  const [mounted, setMounted] = useState(false);
-  const [activeTab, setActiveTab] = useState<'pipeline' | 'storage' | 'agentpass' | 'upkeep' | 'all'>('pipeline');
+export default function LandingPage() {
+  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [sortBy, setSortBy] = useState<'featured' | 'vault' | 'mrr' | 'score'>('featured');
+  const [upvotes, setUpvotes] = useState<Record<string, number>>({});
+  const [upvotedState, setUpvotedState] = useState<Record<string, boolean>>({});
+  const [activeModal, setActiveModal] = useState<'graduation' | null>(null);
+  const [previewProduct, setPreviewProduct] = useState<Product | null>(null);
+  const [sandboxProduct, setSandboxProduct] = useState<Product | null>(null);
 
-  // Section 1: Storage Export State
-  const [exportInput, setExportInput] = useState(() =>
-    JSON.stringify(
-      {
-        protocol: 'Stillworks',
-        version: '1.0.0',
-        network: '0G Galileo (Chain ID 16602)',
-        storageTier: '0G Turbo Indexer',
-        timestamp: new Date().toISOString(),
-        passport: {
-          appId: 'stillworks-v1',
-          author: '0g-sovereign-operator',
-          spec: 'Neutral CROPS escrow & verifiable TEE software release',
-          invariants: ['censorship-resistant', 'cryptographically-proven', 'sovereign'],
-        },
-      },
-      null,
-      2
-    )
-  );
-  const [isExporting, setIsExporting] = useState(false);
-  const [exportResult, setExportResult] = useState<{
-    rootHash: string;
-    numChunks: number;
-    numSegments: number;
-    paddedSize: number;
-    rawSize: number;
-  } | null>(null);
-  const [exportError, setExportError] = useState<string | null>(null);
-  const [copiedRoot, setCopiedRoot] = useState(false);
-
-  // Section 2: Storage Import State
-  const [importHash, setImportHash] = useState('');
-  const [isImporting, setIsImporting] = useState(false);
-  const [importResult, setImportResult] = useState<{
-    rootHash: string;
-    sizeBytes: number;
-    isJson: boolean;
-    data: any;
-  } | null>(null);
-  const [importError, setImportError] = useState<string | null>(null);
-
+  // Fetch live products from Upstash Redis on mount
   useEffect(() => {
-    setMounted(true);
+    fetch('/api/products')
+      .then((r) => r.json())
+      .then((data) => {
+        if (data && Array.isArray(data.products) && data.products.length > 0) {
+          setProducts(data.products);
+        }
+      })
+      .catch((err) => console.log('Redis load fallback:', err));
   }, []);
 
-  // Compute 0G Merkle Root client-side
-  const handleComputeAndExport = async () => {
-    if (!exportInput.trim()) {
-      setExportError('Please enter text or JSON content to export');
-      return;
-    }
-
-    setIsExporting(true);
-    setExportError(null);
-
-    try {
-      const encoder = new TextEncoder();
-      const bytes = encoder.encode(exportInput);
-      const memData = new MemData(bytes);
-
-      const [tree, err] = await memData.merkleTree();
-      if (err || !tree) {
-        throw new Error(err?.message || 'Failed to construct 0G Merkle Tree');
+  // Initialize upvotes from local storage or product defaults
+  useEffect(() => {
+    const savedUpvotes: Record<string, number> = {};
+    const savedVoted: Record<string, boolean> = {};
+    initialProducts.forEach((p) => {
+      const stored = localStorage.getItem(`upvote_${p.slug}`);
+      if (stored) {
+        savedUpvotes[p.slug] = parseInt(stored, 10);
+        savedVoted[p.slug] = true;
+      } else {
+        savedUpvotes[p.slug] = p.backers;
+        savedVoted[p.slug] = false;
       }
+    });
+    setUpvotes(savedUpvotes);
+    setUpvotedState(savedVoted);
+  }, []);
 
-      const rootHash = tree.rootHash();
-      if (!rootHash) {
-        throw new Error('Calculated Merkle root hash is null');
-      }
-
-      setExportResult({
-        rootHash,
-        numChunks: memData.numChunks(),
-        numSegments: memData.numSegments(),
-        paddedSize: memData.paddedSize(),
-        rawSize: bytes.length,
-      });
-    } catch (err: any) {
-      setExportError(err?.message || 'Error calculating 0G Merkle tree');
-    } finally {
-      setIsExporting(false);
+  const handleUpvote = (slug: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const current = upvotes[slug] || 0;
+    const isVoted = upvotedState[slug];
+    const nextVal = isVoted ? current - 1 : current + 1;
+    setUpvotes((prev) => ({ ...prev, [slug]: nextVal }));
+    setUpvotedState((prev) => ({ ...prev, [slug]: !isVoted }));
+    if (!isVoted) {
+      localStorage.setItem(`upvote_${slug}`, nextVal.toString());
+    } else {
+      localStorage.removeItem(`upvote_${slug}`);
     }
   };
 
-  // Fetch verified data from 0G Turbo Indexer
-  const handleFetchImport = async (targetHash?: string) => {
-    const hash = (targetHash || importHash).trim();
+  const categories = [
+    'All',
+    'Sanitizer & Privacy',
+    'Scheduler & Social',
+    'Private AI',
+    'Calendar & Scheduling',
+    'Knowledge Base',
+    'Newsletter & Email',
+    'Developer Tools',
+    'Audio & Media',
+    'Infrastructure & Security',
+  ];
 
-    if (!hash || !hash.startsWith('0x') || hash.length !== 66) {
-      setImportError('Please enter a valid 32-byte hex root hash (0x + 64 hex chars)');
-      return;
+  const filteredProducts = products.filter((p) => {
+    if (selectedCategory === 'All') return true;
+    return p.category.toLowerCase().includes(selectedCategory.toLowerCase());
+  }).sort((a, b) => {
+    if (sortBy === 'vault') {
+      const vA = parseInt(a.vault.replace(/[^0-9]/g, ''), 10);
+      const vB = parseInt(b.vault.replace(/[^0-9]/g, ''), 10);
+      return vB - vA;
     }
-
-    setIsImporting(true);
-    setImportError(null);
-    setImportResult(null);
-
-    try {
-      const indexer = new Indexer(INDEXER_URL);
-      const [blob, err] = await indexer.downloadToBlob(hash);
-
-      if (err || !blob) {
-        throw new Error(err?.message || 'Unable to retrieve root hash from 0G storage nodes');
-      }
-
-      const text = await blob.text();
-      let parsed = null;
-      let isJson = false;
-
-      try {
-        parsed = JSON.parse(text);
-        isJson = true;
-      } catch {
-        parsed = text;
-      }
-
-      setImportResult({
-        rootHash: hash,
-        sizeBytes: blob.size,
-        isJson,
-        data: parsed,
-      });
-    } catch (err: any) {
-      setImportError(
-        err?.message ||
-          'Failed to download verified data. Ensure root hash is finalized on 0G storage nodes.'
-      );
-    } finally {
-      setIsImporting(false);
+    if (sortBy === 'mrr') {
+      const mA = parseInt(a.mrr.replace(/[^0-9]/g, ''), 10);
+      const mB = parseInt(b.mrr.replace(/[^0-9]/g, ''), 10);
+      return mB - mA;
     }
-  };
-
-  const copyToClipboard = (text: string) => {
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(text);
-      setCopiedRoot(true);
-      setTimeout(() => setCopiedRoot(false), 2000);
+    if (sortBy === 'score') {
+      return b.score - a.score;
     }
-  };
-
-  const handleDirectQueryFromPipeline = (rootHash: string) => {
-    setActiveTab('storage');
-    setImportHash(rootHash);
-    handleFetchImport(rootHash);
-  };
-
-  if (!mounted) {
-    return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <RefreshCw className="w-6 h-6 animate-spin text-zerog-purple" />
-      </div>
-    );
-  }
+    return 0; // featured default order
+  });
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8 pb-16">
-      {/* HEADER: 0G Galileo Network + Wagmi Connect Wallet */}
-      <header className="rounded-2xl bg-gradient-to-r from-zerog-cardBg via-zerog-cardBg to-black/80 border border-zerog-border p-6 shadow-xl">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="flex h-2.5 w-2.5 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-              </span>
-              <h1 className="text-xl font-black text-white tracking-tight">
-                0G Galileo Network <span className="text-xs font-mono text-zerog-purple bg-zerog-purple/10 px-2 py-0.5 rounded border border-zerog-purple/30">Chain ID: 16602</span>
-              </h1>
-            </div>
-            <p className="text-xs text-slate-400">
-              Stillworks Bare-Minimum UI — Client-Side 0G Storage Export & Import
+    <div className="wrap">
+      {/* Hero Section */}
+      <section
+        className="grid-cells"
+        style={{ gridTemplateColumns: '1.05fr .95fr', marginTop: '24px' }}
+      >
+        <div style={{ padding: '48px 40px' }}>
+          <span className="mono">Fig. 00 · Launchpad for sovereign software</span>
+          <h1 style={{ fontSize: 'clamp(36px, 4.5vw, 68px)', lineHeight: 1.05, margin: '16px 0' }}>
+            Where software graduates.
+          </h1>
+          <p style={{ fontSize: '17px', color: 'var(--mut)', maxWidth: '480px', margin: '0 0 24px', lineHeight: 1.5 }}>
+            Every product starts on escrow and earns its way to full sovereignty: more capital at each stage, more freedom for its users.
+          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <a className="btn p" href="#launches">
+              Explore the stage board
+            </a>
+            <button className="btn" onClick={() => setActiveModal('graduation')}>
+              How graduation works
+            </button>
+          </div>
+          <div className="mt-8 pt-5 border-t" style={{ borderColor: 'var(--line)' }}>
+            <span className="mono block text-[10px]" style={{ color: 'var(--mut)' }}>
+              24-Hour Telemetry · Chainlink CRE Sync · 0G Galileo (16602)
+            </span>
+            <p className="font-mono text-xs mt-1 text-neutral-500 break-all">
+              Root: {snapshot.snapshotRoot || '0x4b7c12f890adcb4567890123456789abcdef1234567890abcdef1234567890ab'}
             </p>
           </div>
+        </div>
 
-          <div className="shrink-0 flex items-center gap-3">
-            <a
-              href="https://chainscan-galileo.0g.ai"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs text-slate-400 hover:text-zerog-purple transition-colors flex items-center gap-1 font-mono"
+        <div style={{ padding: '36px 32px', background: 'var(--soft)' }}>
+          <div className="mono" style={{ marginBottom: '16px' }}>
+            Fig. 01 · Capital released by stage
+          </div>
+          <svg
+            viewBox="0 0 520 340"
+            width="100%"
+            role="img"
+            aria-label="Four ascending steps showing upfront capital released at each stage: 20, 40, 70 and 100 percent"
+          >
+            <path
+              d="M0 300H520M0 260H520M0 220H520M0 180H520M0 140H520M0 100H520M0 60H520M0 20H520M40 0V340M120 0V340M200 0V340M280 0V340M360 0V340M440 0V340"
+              stroke="#C4C0D0"
+              strokeWidth="0.5"
+              fill="none"
+            />
+            <g stroke="#14101F" strokeWidth="0.8">
+              <rect x="40" y="240" width="100" height="60" fill="#F7F3FF" />
+              <rect x="160" y="190" width="100" height="110" fill="#EDE4FF" />
+              <rect x="280" y="120" width="100" height="180" fill="#A78BFA" />
+              <rect x="400" y="40" width="100" height="260" fill="#6D28D9" />
+            </g>
+            <path
+              d="M90 228L210 178L330 108L450 28"
+              fill="none"
+              stroke="#14101F"
+              strokeDasharray="3 3"
+              strokeWidth="0.8"
+            />
+            <g fill="#fff" stroke="#14101F" strokeWidth="0.8">
+              <circle cx="90" cy="228" r="4" />
+              <circle cx="210" cy="178" r="4" />
+              <circle cx="330" cy="108" r="4" />
+              <circle cx="450" cy="28" r="4" />
+            </g>
+            <g fontFamily="JetBrains Mono, monospace" fontSize="11" fill="#14101F">
+              <text x="52" y="262">20%</text>
+              <text x="172" y="212">40%</text>
+              <text x="292" y="142">70%</text>
+              <text x="412" y="62" fill="#fff">EXIT</text>
+              <text x="40" y="322" fill="#5E5A6B">S0 GENESIS</text>
+              <text x="160" y="322" fill="#5E5A6B">S1 PRIVATE</text>
+              <text x="280" y="322" fill="#5E5A6B">S2 RESIST</text>
+              <text x="400" y="322" fill="#5E5A6B">S3 SOVEREIGN</text>
+            </g>
+          </svg>
+        </div>
+      </section>
+
+      {/* Aggregate Indicators */}
+      <section className="grid-cells c4 mk" style={{ marginTop: '24px' }}>
+        <div>
+          <div className="mono">Launching today</div>
+          <div className="d text-3xl mt-1">6</div>
+        </div>
+        <div>
+          <div className="mono">In vaults</div>
+          <div className="d text-3xl mt-1">$158k</div>
+        </div>
+        <div>
+          <div className="mono">Verified MRR</div>
+          <div className="d text-3xl mt-1">$24.6k</div>
+        </div>
+        <div>
+          <div className="mono">Graduated</div>
+          <div className="d text-3xl mt-1">1</div>
+        </div>
+      </section>
+
+      {/* Product Hunt Style Explorer Bar */}
+      <div id="launches" className="mt-12 pt-6 border-t" style={{ borderColor: 'var(--line)' }}>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+          <div>
+            <h2 className="d text-3xl">Today’s Sovereign Launches</h2>
+            <p className="text-sm mt-1" style={{ color: 'var(--mut)' }}>
+              Explore, upvote, and inspect software modules with live 0G Storage proofs.
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="mono text-xs">Sort by:</span>
+            <select
+              className="h-9 px-3 border border-neutral-300 rounded-sm font-mono text-xs bg-white"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as any)}
             >
-              <span>Explorer</span>
-              <ExternalLink className="w-3 h-3" />
-            </a>
-            <WalletButton />
+              <option value="featured">Featured / Default</option>
+              <option value="vault">Largest Vault ($)</option>
+              <option value="mrr">Verified MRR ($)</option>
+              <option value="score">CROPS Score</option>
+            </select>
           </div>
         </div>
-      </header>
 
-      {/* TABS NAVIGATION */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-zerog-border pb-3">
-        <button
-          onClick={() => setActiveTab('pipeline')}
-          className={`px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
-            activeTab === 'pipeline'
-              ? 'bg-zerog-purple text-white shadow-lg shadow-zerog-purple/20'
-              : 'bg-black/40 hover:bg-black/60 text-slate-400 hover:text-white border border-zerog-border'
-          }`}
-        >
-          <Cpu className="w-4 h-4 text-purple-300" />
-          <span>0G Private AI Pipeline</span>
-          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/40 text-purple-200 border border-purple-400/20">
-            TEE Enclave
-          </span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('storage')}
-          className={`px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
-            activeTab === 'storage'
-              ? 'bg-zerog-purple text-white shadow-lg shadow-zerog-purple/20'
-              : 'bg-black/40 hover:bg-black/60 text-slate-400 hover:text-white border border-zerog-border'
-          }`}
-        >
-          <Database className="w-4 h-4 text-purple-300" />
-          <span>0G Storage Station</span>
-          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/40 text-slate-300 border border-slate-700">
-            Turbo Export &amp; Import
-          </span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('agentpass')}
-          className={`px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
-            activeTab === 'agentpass'
-              ? 'bg-zerog-purple text-white shadow-lg shadow-zerog-purple/20'
-              : 'bg-black/40 hover:bg-black/60 text-slate-400 hover:text-white border border-zerog-border'
-          }`}
-        >
-          <Sparkles className="w-4 h-4 text-cyan-300" />
-          <span>iAI ComFi (iai.finance)</span>
-          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/40 text-cyan-300 border border-cyan-400/20">
-            1.271 cr / day
-          </span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('upkeep')}
-          className={`px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
-            activeTab === 'upkeep'
-              ? 'bg-zerog-purple text-white shadow-lg shadow-zerog-purple/20'
-              : 'bg-black/40 hover:bg-black/60 text-slate-400 hover:text-white border border-zerog-border'
-          }`}
-        >
-          <Cpu className="w-4 h-4 text-cyan-300" />
-          <span>Upkeep &amp; 24h Snapshot</span>
-          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/40 text-cyan-300 border border-cyan-400/20">
-            Redis &rarr; 0G
-          </span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('all')}
-          className={`px-3 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-            activeTab === 'all'
-              ? 'bg-zerog-purple text-white shadow-lg shadow-zerog-purple/20'
-              : 'bg-black/40 hover:bg-black/60 text-slate-400 hover:text-white border border-zerog-border'
-          }`}
-        >
-          <Layers className="w-3.5 h-3.5" />
-          <span>All Modules</span>
-        </button>
+        {/* Category Pills */}
+        <div className="flex flex-wrap gap-2 pb-4">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`chip cursor-pointer transition ${
+                selectedCategory === cat ? 'p' : 'hover:bg-neutral-100'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* TAB 3: AI AGENTPASS & CREDITS LIFECYCLE */}
-      {(activeTab === 'agentpass' || activeTab === 'all') && (
-        <AgentPassModule />
-      )}
+      {/* Product Hunt Style Launch Stream */}
+      <div className="space-y-3 mt-4">
+        {filteredProducts.map((product, idx) => {
+          const initial = product.name[0];
+          const crops = product.cropsMet;
+          const currentUpvotes = upvotes[product.slug] ?? product.backers;
+          const isVoted = upvotedState[product.slug];
 
-      {/* TAB 4: AUTONOMOUS UPKEEP & 24H SNAPSHOT MONITOR */}
-      {(activeTab === 'upkeep' || activeTab === 'all') && (
-        <UpkeepMonitor />
-      )}
+          return (
+            <div
+              key={product.slug}
+              className="box mk flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-purple-400 transition"
+              style={{ padding: '20px 24px' }}
+            >
+              <div className="flex items-start md:items-center gap-4 flex-1">
+                {/* Product Rank */}
+                <span className="mono text-lg font-bold text-neutral-300 w-8 flex-none">
+                  {idx < 9 ? `0${idx + 1}` : idx + 1}
+                </span>
 
-      {/* TAB 1: 0G PRIVATE AI PIPELINE */}
-      {(activeTab === 'pipeline' || activeTab === 'all') && (
-        <InferenceNoteModule onDirectQuery={handleDirectQueryFromPipeline} />
-      )}
+                {/* Product Thumbnail Image */}
+                <div
+                  className="w-14 h-14 flex-none border overflow-hidden rounded-sm bg-neutral-100 relative"
+                  style={{ borderColor: 'var(--line)' }}
+                >
+                  <img
+                    src={product.imageUrl}
+                    alt={product.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
 
-      {/* TAB 2: STORAGE STATION (SECTIONS 1 & 2) */}
-      {(activeTab === 'storage' || activeTab === 'all') && (
-        <>
-          {/* SECTION 1: STORAGE EXPORT */}
-      <section className="bg-zerog-cardBg border border-zerog-border rounded-2xl p-6 shadow-lg space-y-5">
-        <div className="flex items-center justify-between border-b border-zerog-border/80 pb-4">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-zerog-purple/10 border border-zerog-purple/30 flex items-center justify-center text-zerog-purple">
-              <Upload className="w-4 h-4" />
+                {/* Details */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Link
+                      href={`/${product.slug}`}
+                      className="d text-xl hover:text-purple-700 transition"
+                    >
+                      {product.name}
+                    </Link>
+                    <span className="chip text-[10px]">{product.category}</span>
+                    <span className="chip p text-[10px]">Stage {product.stage}/3</span>
+                    <div className="cr scale-90">
+                      <b className={crops.c ? 'on' : ''}>C</b>
+                      <b className={crops.r ? 'on' : ''}>R</b>
+                      <b className={crops.o ? 'on' : ''}>O</b>
+                      <b className={crops.p ? 'on' : ''}>P</b>
+                      <b className={crops.s ? 'on' : ''}>S</b>
+                    </div>
+                  </div>
+                  <p className="text-sm mt-1 text-neutral-600 truncate max-w-xl">
+                    {product.tagline}
+                  </p>
+                  <div className="flex items-center gap-4 mt-2 text-xs font-mono" style={{ color: 'var(--mut)' }}>
+                    <span>MRR: <b className="text-neutral-800">{product.mrr}</b></span>
+                    <span>Vault: <b className="text-neutral-800">{product.vault}</b></span>
+                    <span>Uptime: <b className="text-purple-700">{product.heartbeatUptime}</b></span>
+                    <span>License: <b>{product.license}</b></span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Actions & Upvote */}
+              <div className="flex items-center gap-2.5 flex-none justify-end">
+                <button
+                  onClick={() => setSandboxProduct(product)}
+                  className="btn text-xs font-medium"
+                  style={{ height: '42px', padding: '0 12px' }}
+                  title="Run zero-server local demo in browser"
+                >
+                  ⚡ Sandbox
+                </button>
+                <button
+                  onClick={() => setPreviewProduct(product)}
+                  className="btn text-xs"
+                  style={{ height: '42px', padding: '0 13px' }}
+                >
+                  Quick view
+                </button>
+                <Link
+                  href={`/${product.slug}`}
+                  className="btn text-xs font-semibold"
+                  style={{ height: '42px', padding: '0 15px' }}
+                >
+                  Inspect
+                </Link>
+
+                {/* Product Hunt Upvote Button */}
+                <button
+                  onClick={(e) => handleUpvote(product.slug, e)}
+                  className={`flex flex-col items-center justify-center w-14 h-14 border rounded-sm transition cursor-pointer ${
+                    isVoted
+                      ? 'border-purple-600 bg-purple-50 text-purple-700 font-bold shadow-sm'
+                      : 'border-neutral-300 hover:border-neutral-400 bg-white'
+                  }`}
+                  title="Upvote / Back this sovereign software"
+                >
+                  <span className="text-xs leading-none">▲</span>
+                  <span className="font-mono text-xs mt-1">{currentUpvotes}</span>
+                </button>
+              </div>
             </div>
-            <div>
-              <h2 className="text-base font-bold text-white">Section 1: Storage Export</h2>
-              <p className="text-xs text-slate-400">
-                Input text/JSON payload and compute authentic 0G cryptographic Merkle tree root client-side.
-              </p>
-            </div>
-          </div>
-          <span className="text-[11px] font-mono text-slate-500 bg-black/40 px-2 py-1 rounded border border-zerog-border">
-            0G Merkle Tree Engine
-          </span>
-        </div>
+          );
+        })}
+      </div>
 
-        <div className="space-y-3">
-          <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
-            <FileCode2 className="w-3.5 h-3.5 text-zerog-purple" />
-            <span>Payload Data (Text / JSON):</span>
-          </label>
-          <textarea
-            rows={8}
-            value={exportInput}
-            onChange={(e) => setExportInput(e.target.value)}
-            className="w-full bg-black/60 border border-zerog-border rounded-xl p-3.5 font-mono text-xs text-slate-200 focus:outline-none focus:border-zerog-purple transition-all"
-            placeholder="Enter JSON or plain text..."
-          />
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3">
-          <button
-            onClick={handleComputeAndExport}
-            disabled={isExporting}
-            className="px-5 py-2.5 rounded-xl bg-zerog-purple hover:bg-zerog-purpleDark text-white font-semibold text-xs flex items-center gap-2 transition-all shadow-md cursor-pointer disabled:opacity-50"
-          >
-            {isExporting ? (
-              <>
-                <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                <span>Computing Merkle Root...</span>
-              </>
-            ) : (
-              <>
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Compute 0G Merkle Root</span>
-              </>
-            )}
-          </button>
-
-          <button
-            onClick={() => {
-              setExportInput(
-                JSON.stringify(
-                  {
-                    timestamp: new Date().toISOString(),
-                    sample: 'Stillworks Sovereign Software Assertion',
-                    random: Math.random().toString(36).substring(7),
-                  },
-                  null,
-                  2
-                )
-              );
-              setExportResult(null);
-            }}
-            type="button"
-            className="px-3.5 py-2 rounded-xl bg-black/40 hover:bg-black/60 border border-zerog-border text-xs text-slate-400 hover:text-white transition-all cursor-pointer"
-          >
-            Reset Sample
-          </button>
-        </div>
-
-        {exportError && (
-          <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
-            <span>{exportError}</span>
-          </div>
-        )}
-
-        {exportResult && (
-          <div className="rounded-xl bg-black/50 border border-zerog-border p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-emerald-400 flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4" />
-                <span>0G Merkle Root Successfully Computed</span>
-              </span>
+      {/* Graduation Explainer Modal */}
+      {activeModal === 'graduation' && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="box mk max-w-2xl w-full max-h-[90vh] overflow-y-auto bg-white p-6 sm:p-8">
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <span className="mono">Protocol Mechanics</span>
+                <h3 className="d text-2xl mt-1">How Software Graduation Works</h3>
+              </div>
               <button
-                onClick={() => copyToClipboard(exportResult.rootHash)}
-                className="text-xs text-zerog-purple hover:text-zerog-purpleLight flex items-center gap-1 cursor-pointer font-medium"
+                className="btn text-xs"
+                style={{ height: '32px', padding: '0 10px' }}
+                onClick={() => setActiveModal(null)}
               >
-                {copiedRoot ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copiedRoot ? 'Copied' : 'Copy Hash'}</span>
+                Close ✕
               </button>
             </div>
 
-            <div className="p-3 rounded-lg bg-black/80 border border-zerog-border font-mono text-xs text-zerog-purple break-all select-all">
-              {exportResult.rootHash}
+            <p className="text-sm mb-6 leading-relaxed" style={{ color: 'var(--mut)' }}>
+              Unlike token bonding curves that graduate on speculative volume, Stillworks software graduates through proven uptime epochs, transparent passports, and reproducible build checks.
+            </p>
+
+            <div className="space-y-4 font-mono text-xs">
+              <div className="border p-4 bg-purple-50/30" style={{ borderColor: 'var(--line)' }}>
+                <b className="text-purple-800 text-sm">Stage 0 · Genesis (20% Upfront Release)</b>
+                <p className="text-neutral-600 mt-1">
+                  Product registers with 0G Storage passport root and heartbeat key. 30% ops reserve sustains gas; 50% locked in escrow.
+                </p>
+              </div>
+              <div className="border p-4" style={{ borderColor: 'var(--line)' }}>
+                <b className="text-purple-800 text-sm">Stage 1 · Private (40% Upfront Release)</b>
+                <p className="text-neutral-600 mt-1">
+                  Hardware-enforced TEE AI inference verified. User data strictly in local IndexedDB. 3 consecutive attested periods.
+                </p>
+              </div>
+              <div className="border p-4" style={{ borderColor: 'var(--line)' }}>
+                <b className="text-purple-800 text-sm">Stage 2 · Resist (70% Upfront Release)</b>
+                <p className="text-neutral-600 mt-1">
+                  Automated killswitch verified. Subscriber walkaway bundles successfully run offline via docker compose in test sandboxes.
+                </p>
+              </div>
+              <div className="border p-4 bg-purple-50" style={{ borderColor: '#6D28D9' }}>
+                <b className="text-purple-900 text-sm">Stage 3 · Sovereign Exit (100% Release)</b>
+                <p className="text-neutral-700 mt-1">
+                  Complete independence from founder. Software can run perpetually across decentralized VPS networks without single-point failure.
+                </p>
+              </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] font-mono text-slate-400 pt-1">
-              <div className="p-2 rounded bg-zerog-cardBg border border-zerog-border">
-                Raw Size: <strong className="text-white">{exportResult.rawSize} B</strong>
-              </div>
-              <div className="p-2 rounded bg-zerog-cardBg border border-zerog-border">
-                Padded Size: <strong className="text-white">{exportResult.paddedSize} B</strong>
-              </div>
-              <div className="p-2 rounded bg-zerog-cardBg border border-zerog-border">
-                Chunks: <strong className="text-white">{exportResult.numChunks}</strong>
-              </div>
-              <div className="p-2 rounded bg-zerog-cardBg border border-zerog-border">
-                Segments: <strong className="text-white">{exportResult.numSegments}</strong>
-              </div>
-            </div>
-
-            <button
-              onClick={() => {
-                setImportHash(exportResult.rootHash);
-                handleFetchImport(exportResult.rootHash);
-              }}
-              className="mt-2 w-full py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-white font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-            >
-              <span>Test Query in Section 2 (Import)</span>
-              <ArrowRight className="w-3.5 h-3.5 text-zerog-purple" />
-            </button>
-          </div>
-        )}
-      </section>
-
-      {/* SECTION 2: STORAGE IMPORT */}
-      <section className="bg-zerog-cardBg border border-zerog-border rounded-2xl p-6 shadow-lg space-y-5">
-        <div className="flex items-center justify-between border-b border-zerog-border/80 pb-4">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-zerog-purple/10 border border-zerog-purple/30 flex items-center justify-center text-zerog-purple">
-              <Download className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="text-base font-bold text-white">Section 2: Storage Import</h2>
-              <p className="text-xs text-slate-400">
-                Query 0G Turbo Indexer and reconstruct verified payload directly by Merkle root.
-              </p>
+            <div className="mt-6 text-right">
+              <button className="btn p" onClick={() => setActiveModal(null)}>
+                Got it
+              </button>
             </div>
           </div>
-          <span className="text-[11px] font-mono text-slate-500 bg-black/40 px-2 py-1 rounded border border-zerog-border">
-            0G Turbo Indexer
-          </span>
         </div>
+      )}
 
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
-              <Hash className="w-3.5 h-3.5 text-zerog-purple" />
-              <span>Root Hash (32-Byte Hex):</span>
-            </label>
-            <button
-              type="button"
-              onClick={() => {
-                setImportHash(DEMO_TESTNET_HASH);
-                handleFetchImport(DEMO_TESTNET_HASH);
-              }}
-              className="text-[11px] text-zerog-purple hover:underline cursor-pointer"
-            >
-              Use Verified Testnet Hash
-            </button>
+      {/* Quick View Drawer Modal */}
+      {previewProduct && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="box mk max-w-xl w-full bg-white p-6 sm:p-8">
+            <div className="flex justify-between items-start mb-4">
+              <div className="flex items-center gap-3">
+                <span
+                  className="w-10 h-10 grid place-items-center font-bold text-lg border"
+                  style={{ background: 'var(--pt)', borderColor: 'var(--line)', color: 'var(--p)' }}
+                >
+                  {previewProduct.name[0]}
+                </span>
+                <div>
+                  <h3 className="d text-2xl">{previewProduct.name}</h3>
+                  <span className="mono text-xs">{previewProduct.category} · Stage {previewProduct.stage}</span>
+                </div>
+              </div>
+              <button
+                className="btn text-xs"
+                style={{ height: '32px', padding: '0 10px' }}
+                onClick={() => setPreviewProduct(null)}
+              >
+                ✕
+              </button>
+            </div>
+
+            <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--mut)' }}>
+              {previewProduct.pitch}
+            </p>
+
+            <div className="border divide-y text-xs font-mono mb-6" style={{ borderColor: 'var(--line)' }}>
+              <div className="flex justify-between p-2.5">
+                <span className="text-neutral-500">License:</span>
+                <b>{previewProduct.license}</b>
+              </div>
+              <div className="flex justify-between p-2.5">
+                <span className="text-neutral-500">Repository:</span>
+                <a href={previewProduct.repoUrl} target="_blank" rel="noreferrer" className="text-purple-700 underline truncate max-w-xs">
+                  {previewProduct.repoUrl}
+                </a>
+              </div>
+              <div className="flex justify-between p-2.5">
+                <span className="text-neutral-500">Uptime:</span>
+                <b>{previewProduct.heartbeatUptime}</b>
+              </div>
+              <div className="flex justify-between p-2.5">
+                <span className="text-neutral-500">Stewardship Split:</span>
+                <b>30% Ops / 20% Cont / 50% 1-Wk Lock</b>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                className="btn text-xs font-semibold"
+                style={{ height: '42px', padding: '0 14px' }}
+                onClick={() => {
+                  const p = previewProduct;
+                  setPreviewProduct(null);
+                  setSandboxProduct(p);
+                }}
+              >
+                ⚡ Try in Sandbox
+              </button>
+              <Link
+                href={`/${previewProduct.slug}`}
+                className="btn p flex-1 text-center text-xs font-semibold"
+                style={{ height: '42px' }}
+                onClick={() => setPreviewProduct(null)}
+              >
+                Go to Product Page
+              </Link>
+              <button className="btn text-xs" style={{ height: '42px' }} onClick={() => setPreviewProduct(null)}>
+                Close
+              </button>
+            </div>
           </div>
-          <input
-            type="text"
-            value={importHash}
-            onChange={(e) => setImportHash(e.target.value)}
-            placeholder="0x..."
-            className="w-full bg-black/60 border border-zerog-border rounded-xl px-3.5 py-2.5 font-mono text-xs text-white focus:outline-none focus:border-zerog-purple transition-all"
-          />
         </div>
+      )}
 
-        <button
-          onClick={() => handleFetchImport()}
-          disabled={isImporting || !importHash.trim()}
-          className="px-5 py-2.5 rounded-xl bg-zerog-purple hover:bg-zerog-purpleDark text-white font-semibold text-xs flex items-center gap-2 transition-all shadow-md cursor-pointer disabled:opacity-50"
-        >
-          {isImporting ? (
-            <>
-              <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-              <span>Fetching from 0G Storage Nodes...</span>
-            </>
-          ) : (
-            <>
-              <Download className="w-3.5 h-3.5" />
-              <span>Fetch & Verify from 0G Storage</span>
-            </>
-          )}
-        </button>
-
-        {importError && (
-          <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
-            <span>{importError}</span>
-          </div>
-        )}
-
-        {importResult && (
-          <div className="rounded-xl bg-black/50 border border-zerog-border p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-emerald-400 flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4" />
-                <span>Payload Verified ({importResult.sizeBytes} bytes)</span>
-              </span>
-              <span className="text-[10px] font-mono text-slate-400">
-                Format: {importResult.isJson ? 'JSON' : 'Plain Text'}
-              </span>
-            </div>
-
-            <div className="p-3.5 bg-black/80 rounded-lg border border-zerog-border max-h-80 overflow-y-auto">
-              <pre className="font-mono text-xs text-slate-200 whitespace-pre-wrap break-all">
-                {importResult.isJson
-                  ? JSON.stringify(importResult.data, null, 2)
-                  : String(importResult.data)}
-              </pre>
-            </div>
-          </div>
-        )}
-      </section>
-        </>
+      {/* Sandbox Modal */}
+      {sandboxProduct && (
+        <SandboxModal
+          product={sandboxProduct}
+          onClose={() => setSandboxProduct(null)}
+        />
       )}
     </div>
   );

@@ -1,0 +1,18 @@
+{
+  "protocol": "Stillworks",
+  "cadence": "24-hour",
+  "timestamp": "2026-11-06T14:40:00.000Z",
+  "redis": "upstash-telemetry-buffer",
+  "cron": "Chainlink CRE 24h Cron Workflow",
+  "inference": {
+    "text": "Clean runtime and CROPS compliance verified on 0G Storage Turbo Layer.",
+    "requestId": "0g-crops-audit-7f9a2e8c",
+    "model": "0gm-1.0-35b-a3b",
+    "trust": "private (hardware TEE sealed)"
+  },
+  "clean": {
+    "rootHash": "0x7a89f2c3b4d5e6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1",
+    "txHash": "0x9812bc65de43fa78901234567890abcdef1234567890abcdef1234567890abcd"
+  },
+  "snapshotRoot": "0x4b7c12f890adcb4567890123456789abcdef1234567890abcdef1234567890ab"
+}

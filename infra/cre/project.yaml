@@ -1,0 +1,4 @@
+staging-settings:
+  rpcs:
+    - chain-name: 0g-testnet-galileo-1
+      url: https://evmrpc-testnet.0g.ai

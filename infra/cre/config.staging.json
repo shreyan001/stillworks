@@ -1,0 +1,5 @@
+{
+  "healthCheckUrl": "https://clean.stillworks.com/healthz",
+  "chainSelector": "6892437333620424805",
+  "consumerContractAddress": "0x237eA22D38a1e20EC50b39711014B9C87dBb21c7"
+}

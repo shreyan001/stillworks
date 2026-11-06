@@ -1,0 +1,18 @@
+{
+  "network": "0G Galileo Testnet",
+  "chainId": 16602,
+  "deployedAt": "2026-11-06T11:41:46.299Z",
+  "contracts": {
+    "usdt": "0x6A8c371B01A9b9657c3bfbF8677c96408145B512",
+    "cleanEscrow": "0x153badA8AB7C65DAF3a90f581E6b34AB7cAC543a",
+    "zerogServingBroker": "0x0AD9690e0b34aB2d493DE02cDF149ee34f6C9939",
+    "hourlyProtocolHub": "0xb2b264386d3b88085ca7e4114a6B0eF0358aC450",
+    "waterfallContingencyHub": "0x3DE98F1928157098e6c82F316Ac04BbF46c7B10e"
+  },
+  "txHashes": {
+    "hourlyProtocolHubDeploy": "0x5917fad493a0e327843c71d86eef0e2b5c0176892d532ad5169739e35e577955",
+    "waterfallContingencyHubDeploy": "0x0029fba3e5141a17698e179d9bcde2609576e0c3029086a73e02a3a32cf4852c",
+    "registerClean": "0x085d7ffe73b1c3cd8933c5cde0d8bd6ad825579d33476eb1f5b91ec6184ed64e",
+    "linkCleanEscrow": "0xcfa2213670d6ac32ac51d81a74be27343b21fbca307f1060eea79241e8a72d86"
+  }
+}

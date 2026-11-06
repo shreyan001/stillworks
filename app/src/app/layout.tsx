@@ -4,26 +4,25 @@ import { Providers } from './providers';
 import { Navbar } from '@/components/Navbar';
 
 export const metadata: Metadata = {
-  title: 'Stillworks | Sovereign Software Commerce on 0G',
-  description: 'Neutral escrow rails, TEE-audited passports, and automated walkaway guarantees powered by 0G Chain, 0G Storage, and 0G Compute.',
+  title: 'Stillworks',
+  description: 'Open-tool store. Public hashes are written to 0G every 24 hours and posted to the contract by Chainlink CRE.',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-zerog-darkBg text-slate-100 min-h-screen flex flex-col">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Space+Grotesk:wght@600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body>
         <Providers>
           <Navbar />
-          <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 lg:p-8">
-            {children}
-          </main>
-          <footer className="border-t border-zerog-border py-6 text-center text-xs text-slate-500">
-            Stillworks — ETHGlobal Mumbai 2026. Built with 0G Galileo (16602) & 0G Storage Turbo.
-          </footer>
+          <main>{children}</main>
         </Providers>
       </body>
     </html>

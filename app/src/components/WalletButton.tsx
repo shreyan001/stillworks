@@ -1,60 +1,81 @@
 'use client';
 
-import { useAccount, useConnect, useDisconnect, useBalance } from 'wagmi';
+import { usePrivy } from '@privy-io/react-auth';
+import { useAccount, useDisconnect, useBalance } from 'wagmi';
 import { zeroGGalileo } from '@/lib/chains/zeroG';
-import { Wallet, LogOut, CheckCircle2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export function WalletButton() {
-  const { address, isConnected, chain } = useAccount();
-  const { connect, connectors } = useConnect();
+  const { ready, authenticated, user, login, logout } = usePrivy();
+  const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
+
+  const activeAddress = address || (user?.wallet?.address as `0x${string}` | undefined);
+
   const { data: balance } = useBalance({
-    address,
+    address: activeAddress,
     chainId: zeroGGalileo.id,
   });
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  if (!mounted) {
+  if (!mounted || !ready) {
     return (
-      <div className="h-9 w-28 rounded-lg bg-zerog-border animate-pulse" />
+      <div
+        className="h-[60px] px-4 flex items-center border-r font-mono text-xs text-neutral-400"
+        style={{ borderColor: 'var(--line)' }}
+      >
+        Initializing...
+      </div>
     );
   }
 
-  if (isConnected && address) {
+  if ((authenticated || isConnected) && activeAddress) {
     return (
-      <div className="flex items-center space-x-2">
-        <div className="hidden sm:flex flex-col text-right">
-          <span className="text-xs font-semibold text-slate-200">
-            {address.slice(0, 6)}...{address.slice(-4)}
-          </span>
-          <span className="text-[10px] text-zerog-purple font-mono">
-            {balance ? `${Number(balance.formatted).toFixed(3)} 0G` : '0.000 0G'}
+      <div
+        className="flex items-center h-[60px] px-4 border-r gap-3 bg-white"
+        style={{ borderColor: 'var(--line)' }}
+      >
+        <div className="flex flex-col text-right">
+          <div className="flex items-center justify-end gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            <span className="font-mono text-xs font-semibold" style={{ color: 'var(--ink)' }}>
+              {activeAddress.slice(0, 6)}…{activeAddress.slice(-4)}
+            </span>
+          </div>
+          <span className="font-mono text-[10px]" style={{ color: 'var(--p)' }}>
+            {balance ? `${Number(balance.formatted).toFixed(3)} 0G` : '0.000 0G'} · 1.271 iAI / day
           </span>
         </div>
         <button
-          onClick={() => disconnect()}
-          className="flex items-center space-x-1.5 px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white bg-zerog-cardBg border border-zerog-border rounded-lg hover:border-red-500/50 hover:bg-red-500/10 transition-all"
-          title="Disconnect wallet"
+          onClick={async () => {
+            if (authenticated) await logout();
+            disconnect();
+          }}
+          className="chip hover:bg-red-50 hover:text-red-700 hover:border-red-300 transition"
+          title="Sign out"
+          style={{ height: '26px', cursor: 'pointer' }}
         >
-          <LogOut className="w-3.5 h-3.5 text-slate-400" />
-          <span className="hidden sm:inline">Exit</span>
+          Exit
         </button>
       </div>
     );
   }
 
-  const connector = connectors[0];
-
   return (
     <button
-      onClick={() => connector && connect({ connector })}
-      className="flex items-center space-x-2 px-4 py-2 text-xs font-semibold text-white bg-zerog-purple hover:bg-zerog-purpleDark rounded-lg shadow-md hover:shadow-zerog-purple/20 transition-all cursor-pointer"
+      onClick={() => login()}
+      className="flex items-center h-[60px] px-5 border-r font-mono text-xs font-semibold hover:bg-neutral-50 transition"
+      style={{
+        borderColor: 'var(--line)',
+        color: 'var(--pd)',
+        background: 'var(--pt)',
+        cursor: 'pointer',
+      }}
     >
-      <Wallet className="w-4 h-4" />
-      <span>Connect Wallet</span>
+      <span className="w-2 h-2 rounded-full mr-2" style={{ background: '#6D28D9' }} />
+      Sign in · Privy / 0G
     </button>
   );
 }
