@@ -192,4 +192,4 @@ Format:
 - Human (shreyan): Clarified the exact NFT/token protocol is iai.finance (https://iai.finance/).
 - Tool / model: Firstmate (Antigravity)
 - Prompt summary: "nah as for those nft it is this one https://iai.finance/"
-- Commit: not committed
+- Commit: f7871c9
