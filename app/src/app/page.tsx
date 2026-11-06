@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { WalletButton } from '@/components/WalletButton';
 import { InferenceNoteModule } from '@/components/InferenceNoteModule';
+import { AgentPassModule } from '@/components/AgentPassModule';
+import { UpkeepMonitor } from '@/components/UpkeepMonitor';
 import { MemData, Indexer } from '@0gfoundation/0g-storage-ts-sdk';
 import {
   Database,
@@ -28,7 +30,7 @@ const DEMO_TESTNET_HASH = '0xf004c8fb08c6c208a40320d96901b737f62d7e9ed2505f33498
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
-  const [activeTab, setActiveTab] = useState<'pipeline' | 'storage' | 'all'>('pipeline');
+  const [activeTab, setActiveTab] = useState<'pipeline' | 'storage' | 'agentpass' | 'upkeep' | 'all'>('pipeline');
 
   // Section 1: Storage Export State
   const [exportInput, setExportInput] = useState(() =>
@@ -253,6 +255,36 @@ export default function Home() {
         </button>
 
         <button
+          onClick={() => setActiveTab('agentpass')}
+          className={`px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+            activeTab === 'agentpass'
+              ? 'bg-zerog-purple text-white shadow-lg shadow-zerog-purple/20'
+              : 'bg-black/40 hover:bg-black/60 text-slate-400 hover:text-white border border-zerog-border'
+          }`}
+        >
+          <Sparkles className="w-4 h-4 text-amber-300" />
+          <span>AI AgentPass &amp; Credits</span>
+          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/40 text-amber-300 border border-amber-400/20">
+            Privy Free Tier
+          </span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('upkeep')}
+          className={`px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+            activeTab === 'upkeep'
+              ? 'bg-zerog-purple text-white shadow-lg shadow-zerog-purple/20'
+              : 'bg-black/40 hover:bg-black/60 text-slate-400 hover:text-white border border-zerog-border'
+          }`}
+        >
+          <Cpu className="w-4 h-4 text-cyan-300" />
+          <span>Upkeep &amp; 24h Snapshot</span>
+          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/40 text-cyan-300 border border-cyan-400/20">
+            Redis &rarr; 0G
+          </span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('all')}
           className={`px-3 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
             activeTab === 'all'
@@ -264,6 +296,16 @@ export default function Home() {
           <span>All Modules</span>
         </button>
       </div>
+
+      {/* TAB 3: AI AGENTPASS & CREDITS LIFECYCLE */}
+      {(activeTab === 'agentpass' || activeTab === 'all') && (
+        <AgentPassModule />
+      )}
+
+      {/* TAB 4: AUTONOMOUS UPKEEP & 24H SNAPSHOT MONITOR */}
+      {(activeTab === 'upkeep' || activeTab === 'all') && (
+        <UpkeepMonitor />
+      )}
 
       {/* TAB 1: 0G PRIVATE AI PIPELINE */}
       {(activeTab === 'pipeline' || activeTab === 'all') && (

@@ -175,3 +175,12 @@ Format:
 - Tool / model: Firstmate (Antigravity)
 - Prompt summary: "At this point, we need to evaluate the appropriate backend storage system... What steps should we take to create a perfect crop system?... run an independent agent through the system to reach the heartbeat"
 - Commit: 83c12fd
+
+
+## 2026-11-06 06:55 IST — User Lifecycle, iAI AgentPass, Local-First Privacy & 24h 0G Snapshot Upkeep
+- Files: coordination-v2/USER_LIFECYCLE_AND_UPKEEP_SPEC.md, app/src/components/AgentPassModule.tsx, app/src/components/UpkeepMonitor.tsx, app/src/app/page.tsx, scripts/sync-daily-snapshot.mjs, AI_LOG.md
+- AI-generated: Authored complete user lifecycle and upkeep specification cross-referencing Ethereum Foundation CROPS mandate and 0G Foundation tracks; created AgentPassModule UI for Privy free tier, daily credit accrual, S-product pooling, subscription rebates, and client-side local privacy enforcement; created UpkeepMonitor UI for Redis buffer monitoring, 24h Celery sync cadence, and Developer Operations Budget tracking; integrated new tabs into main Next.js page with 100% clean static export build; implemented and verified standalone 24h snapshot sync script (`scripts/sync-daily-snapshot.mjs`) constructing 0G Merkle roots and verifying against live 0G Turbo Indexer.
+- Human (shreyan): Specified entire user lifecycle (Privy/iAI NFT onboarding, free tier for inference, daily subscription credit accrual & pooling, local-first browser privacy complying with EF Mandate, Redis telemetry cache with 24h 0G Storage Turbo batch snapshot, Celery tracking, zero traditional DB requirement, and developer operations budget).
+- Tool / model: Firstmate (Antigravity)
+- Prompt summary: "We have the second set of updates now. This describes the entire user lifecycle: how a user signs up on a site and what to expect from the product... Privy wallet holders... Redis as a daily database cache... push data to ZeroDB... EF mandate... operations budget"
+- Commit: not committed
