@@ -79,9 +79,10 @@ export default function LaunchPage() {
       setDeployedResult({
         ...data.product,
         deployedEscrow: '0x153badA8AB7C65DAF3a90f581E6b34AB7cAC543a',
-        hubAddress: '0x6939b3e9FB99Ef0005a3e6dd8Ed223E121c51460',
-        merkleRoot: '0x7a89f2c3b4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1',
-        txHash: '0x9e88b21c44fa70d8912e…00af (Galileo Block #64152910)',
+        hubAddress: '0xb2b264386d3b88085ca7e4114a6B0eF0358aC450',
+        waterfallHubAddress: '0x3DE98F1928157098e6c82F316Ac04BbF46c7B10e',
+        merkleRoot: '0xd6929a5ee6f781bd6ad2e2fb98fb49e170ce6da345fe495676ddd58fea89bbcd',
+        txHash: '0x27023f857472d24c2acb344691d483eb35e7d21e4b4f3ed038d98133cca8d676 (Galileo Block #64167021)',
       });
     } catch (err: any) {
       setErrorMsg(err?.message || 'Deployment failed');
@@ -93,7 +94,7 @@ export default function LaunchPage() {
   return (
     <div className="wrap">
       <div className="flex items-center gap-2 pt-6 pb-4 text-xs font-mono" style={{ color: 'var(--mut)' }}>
-        <Link href="/" className="hover:text-purple-700">Stage board</Link>
+        <Link href="/" className="hover:text-purple-700">Marketplace</Link>
         <span>/</span>
         <span style={{ color: 'var(--ink)' }}>Developer Launch & Deployment</span>
       </div>

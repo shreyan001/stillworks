@@ -12,6 +12,38 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                var isExtNoise = function(msg) {
+                  return typeof msg === 'string' && (
+                    msg.indexOf('Could not establish connection') !== -1 ||
+                    msg.indexOf('Receiving end does not exist') !== -1 ||
+                    msg.indexOf('message channel closed') !== -1 ||
+                    msg.indexOf('Extension context invalidated') !== -1
+                  );
+                };
+                var origAdd = window.addEventListener;
+                window.addEventListener = function(type, listener, options) {
+                  if (type === 'unhandledrejection' || type === 'error') {
+                    var wrapped = function(e) {
+                      var msg = e && (e.message || (e.reason && (e.reason.message || String(e.reason))) || '');
+                      if (isExtNoise(msg)) {
+                        if (e.preventDefault) e.preventDefault();
+                        if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+                        return;
+                      }
+                      return typeof listener === 'function' ? listener.apply(this, arguments) : null;
+                    };
+                    return origAdd.call(this, type, wrapped, options);
+                  }
+                  return origAdd.apply(this, arguments);
+                };
+              })();
+            `,
+          }}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link

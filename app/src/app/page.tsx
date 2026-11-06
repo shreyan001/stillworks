@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { products as initialProducts, type Product } from '@/data/products';
 import rawSnapshot from '@/data/live-snapshot.json';
 import { SandboxModal } from '@/components/SandboxModal';
+import { RedisTelemetryBanner } from '@/components/RedisTelemetryBanner';
 
 const snapshot = rawSnapshot as {
   timestamp: string | null;
@@ -102,6 +103,11 @@ export default function LandingPage() {
 
   return (
     <div className="wrap">
+      {/* Live Upstash Redis & 0G Telemetry Banner */}
+      <div className="pt-4">
+        <RedisTelemetryBanner />
+      </div>
+
       {/* Hero Section */}
       <section
         className="grid-cells"

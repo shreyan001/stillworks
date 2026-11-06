@@ -162,7 +162,7 @@ export default function ExplorePage() {
 
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 pt-6 pb-4 text-xs font-mono" style={{ color: 'var(--mut)' }}>
-        <Link href="/" className="hover:text-purple-700">Stage board</Link>
+        <Link href="/" className="hover:text-purple-700">Marketplace</Link>
         <span>/</span>
         <span style={{ color: 'var(--ink)' }}>Product Hunt for Sovereign Software</span>
       </div>

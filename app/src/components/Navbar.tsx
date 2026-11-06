@@ -8,11 +8,11 @@ export function Navbar() {
   const pathname = usePathname();
 
   const navLinks = [
-    { href: '/', label: 'Stage board' },
-    { href: '/app', label: 'Explore / Launches' },
+    { href: '/', label: 'Marketplace' },
+    { href: '/app', label: 'Launches' },
     { href: '/leaderboard', label: 'Registry' },
     { href: '/proposals', label: 'Reward Hub' },
-    { href: '/console', label: 'Maker console' },
+    { href: '/console', label: 'Console' },
   ];
 
   return (

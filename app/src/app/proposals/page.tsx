@@ -17,7 +17,7 @@ export default function ProposalsPage() {
       <main className="wrap pt-8 space-y-8">
         <div className="flex items-center gap-2 text-xs font-mono text-neutral-500">
           <Link href="/" className="hover:text-purple-700 flex items-center gap-1">
-            <ArrowLeft className="w-3.5 h-3.5" /> Back to Stage board
+            <ArrowLeft className="w-3.5 h-3.5" /> Back to Marketplace
           </Link>
           <span>/</span>
           <span className="text-neutral-800 font-semibold">Reward Hub & Contingency Waterfall</span>
