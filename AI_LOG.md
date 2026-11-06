@@ -184,3 +184,12 @@ Format:
 - Tool / model: Firstmate (Antigravity)
 - Prompt summary: "We have the second set of updates now. This describes the entire user lifecycle: how a user signs up on a site and what to expect from the product... Privy wallet holders... Redis as a daily database cache... push data to ZeroDB... EF mandate... operations budget"
 - Commit: 8028908
+
+
+## 2026-11-06 07:00 IST — Wire iai.finance Infinite AI (iAI) ComFi Engine & 0G Token Contract
+- Files: app/src/components/AgentPassModule.tsx, app/src/app/page.tsx, coordination-v2/USER_LIFECYCLE_AND_UPKEEP_SPEC.md, AI_LOG.md
+- AI-generated: Refactored AgentPass module into authentic 0G Compute Finance (ComFi) integration using official iai.finance protocol; bound 0G Chain token contract `0xc77FBd3824cc68e612b26114D176879aDdc29463`, Ascend liquid staking collateral (`a0G`), and live compute yield (1.271 compute credits / iAI daily); wired direct links to iai.finance and comfy.fun launchpad; verified Next.js production build passes with 0 errors.
+- Human (shreyan): Clarified the exact NFT/token protocol is iai.finance (https://iai.finance/).
+- Tool / model: Firstmate (Antigravity)
+- Prompt summary: "nah as for those nft it is this one https://iai.finance/"
+- Commit: not committed

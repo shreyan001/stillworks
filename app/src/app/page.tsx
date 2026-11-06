@@ -262,10 +262,10 @@ export default function Home() {
               : 'bg-black/40 hover:bg-black/60 text-slate-400 hover:text-white border border-zerog-border'
           }`}
         >
-          <Sparkles className="w-4 h-4 text-amber-300" />
-          <span>AI AgentPass &amp; Credits</span>
-          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/40 text-amber-300 border border-amber-400/20">
-            Privy Free Tier
+          <Sparkles className="w-4 h-4 text-cyan-300" />
+          <span>iAI ComFi (iai.finance)</span>
+          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/40 text-cyan-300 border border-cyan-400/20">
+            1.271 cr / day
           </span>
         </button>
 

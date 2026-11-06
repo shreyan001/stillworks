@@ -42,16 +42,20 @@ flowchart TD
     end
 ```
 
-### 2.1 Onboarding & Wallet Connection
-1. **Privy Embedded Wallet:** Users sign in seamlessly with social/email logins abstracted via Privy or standard EVM wallets (MetaMask, Rabby).
-2. **AI Agent NFT (iNFT):** An identity and credit token is bound to the user.
-3. **Dedicated Free Tier:** Privy wallet holders receive an initial subsidized inference quota. Users can test software modules without consuming their own testnet 0G tokens or personal credits.
+### 2.1 Onboarding & iai.finance ComFi Integration
+1. **Wallet Connection:** Users sign in via Privy embedded wallets or standard EVM wallets (MetaMask, Rabby).
+2. **Infinite AI (iAI) by iai.finance:**
+   - **Contract on 0G Chain:** `0xc77FBd3824cc68e612b26114D176879aDdc29463`
+   - **Protocol Architecture:** Flagship product of **Compute Finance (ComFi)** on 0G.
+   - **Staking Mechanics:** Users stake native 0G via **Ascend** (liquid staking layer) to receive `a0G`, then deposit `a0G` on [iai.finance](https://iai.finance/) to mint and stake `iAI`.
+   - **Daily Compute Yield:** Unlike speculative tokens, staking `iAI` generates **~1.271 AI compute credits per day per iAI**, which can be spent directly on the 0G Private Computer and Stillworks escrow fees.
+   - **Agent Token Launchpad:** Associated pools and agent positions trade on [comfy.fun](https://comfy.fun/).
+3. **Dedicated Privy Free Tier:** Privy wallet holders receive an initial subsidized inference quota. Users can test Stillworks software modules without burning their personal credits or 0G tokens.
 
 ### 2.2 Credit Accrual, Pooling & Subscription Discounts
-* **Daily Subscription Credits:** Holders of an active AI Agent NFT receive daily protocol credits based on active participation or community contributions.
-* **S-Product Pooling:** Users can delegate their Agent NFT to a common pool supporting multiple "S Products" (Sovereign Software products listed on Stillworks) or stake it directly into an active subscription.
-* **Waste-Free Rebate:** By plugging the NFT into a subscription agreement, the daily credit allowance automatically offsets the escrow deposit amount, reducing monthly subscription costs.
-* **Community Treasury Routing:** Users who do not exhaust their daily inference allowances can route unused points into a shared community treasury, earning loyalty credits while enabling subsidized access for open-source researchers.
+* **Waste-Free Subscription Rebates:** By staking or connecting their `iAI` position to Stillworks, the daily 1.271 compute credit yield automatically offsets the recurring escrow billing in `SubscriptionEscrow.sol`.
+* **S-Product Pooling:** Users can delegate their `iAI` compute yield to a common pool supporting multiple "S Products" (Sovereign Software products listed on Stillworks) or stake it directly into an active subscription for a **15–30% discount**.
+* **Community Treasury Routing:** Unused compute credits can be routed into a shared community treasury on `comfy.fun`, earning loyalty rebates while subsidizing inference for open-source software developers.
 
 ---
 
