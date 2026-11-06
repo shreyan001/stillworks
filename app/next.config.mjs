@@ -1,14 +1,14 @@
-const isProd = process.env.NODE_ENV === 'production';
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Only apply static export for production builds, allowing dev server (next dev) to run dynamically with hot reload
-  ...(isProd ? { output: 'export' } : {}),
   reactStrictMode: true,
   images: {
     unoptimized: true,
   },
-  webpack: (config, { isServer }) => {
+  webpack: (config, { dev, isServer }) => {
+    // In dev mode, use fast in-memory caching to eliminate OneDrive file-sync lockups
+    if (dev) {
+      config.cache = { type: 'memory' };
+    }
     config.externals.push('pino-pretty', 'lokijs', 'encoding');
     config.resolve.alias = {
       ...config.resolve.alias,
