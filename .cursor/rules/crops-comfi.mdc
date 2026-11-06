@@ -1,0 +1,30 @@
+---
+description: Stillworks CROPS Compliance, iai.finance ComFi, and 24h 0G Storage Upkeep Rules
+globs: **/*
+---
+
+# Stillworks: CROPS & ComFi Operating Rules
+
+## 1. Compute Finance (ComFi) with iai.finance
+- **iAI Token Contract (0G Chain):** `0xc77FBd3824cc68e612b26114D176879aDdc29463`
+- **Official Platform:** `https://iai.finance/`
+- **Trading Launchpad:** `https://comfy.fun/`
+- **Yield Mechanism:** Staked `a0G` &rarr; `iAI` yields **~1.271 AI compute credits daily per iAI**.
+- **Subscription Discount:** Staking `iAI` into `SubscriptionEscrow.sol` covers recurring subscription dues via daily compute yield (providing a ~25% rebate).
+
+## 2. Ethereum Foundation CROPS Local-First Privacy Mandate
+- **Rule:** Personal user data and private keys MUST remain on the user's device (`localStorage` / `IndexedDB`).
+- **Zero Central Database:** Do not introduce a central PostgreSQL, MySQL, or SaaS database for user state or chat histories.
+- **Dual-Plane Model:**
+  - **Private Plane:** Local browser sandbox only.
+  - **Public Plane:** 100% open-source metadata, buffered in Redis, periodically committed to 0G.
+
+## 3. Autonomous Upkeep & 24-Hour 0G Storage Snapshots
+- Public state streams into in-memory **Redis** cache for sub-millisecond response.
+- Every 24 hours, an autonomous Celery/sidecar daemon aggregates the state into JSON, computes a authentic **32-byte 0G Merkle Root**, and uploads to **0G Storage Turbo Layer** (`https://indexer-storage-testnet-turbo.0g.ai`).
+- The Merkle root is posted onchain to `ProductRegistry.sol`.
+
+## 4. Key Data Room Documents
+- Master Data Room Brief: `dataroom/USER_LIFECYCLE_COMFI_AND_UPKEEP.md`
+- Architectural Spec: `coordination-v2/USER_LIFECYCLE_AND_UPKEEP_SPEC.md`
+- Cursor Instructions: `coordination-v2/agents/cursor.md`

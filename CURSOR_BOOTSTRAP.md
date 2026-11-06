@@ -7,6 +7,8 @@ Load .cursorrules and coordination-v2/agents/cursor.md. You are the Cursor Lead 
 ```
 
 ## Available Context for Cursor
+- **ComFi & Upkeep Data Room:** `dataroom/USER_LIFECYCLE_COMFI_AND_UPKEEP.md`
+- **Protocol Architectural Spec:** `coordination-v2/USER_LIFECYCLE_AND_UPKEEP_SPEC.md`
 - **Network Configuration:** `coordination-v2/ZEROG_INFRASTRUCTURE.md`
 - **Agent Coordination Hub:** `coordination-v2/agents/cursor.md`
 - **POSO Protocol Spec:** `coordination-v2/agents/poso.md`

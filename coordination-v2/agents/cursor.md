@@ -16,11 +16,12 @@ Cursor references these network values automatically:
 - **Storage upload path:** that indexer plus the Galileo RPC. `storagerpc-testnet.0g.ai` does not resolve.
 - **0G Private Computer Router:** `https://router-api-testnet.integratenetwork.work/v1`
 - **Payment Layer Contract:** `0x0AD9690e0b34aB2d493DE02cDF149ee34f6C9939`
+- **iAI ComFi Token (iai.finance):** `0xc77FBd3824cc68e612b26114D176879aDdc29463` (minted via `a0G` on [iai.finance](https://iai.finance/), traded on [comfy.fun](https://comfy.fun/))
 - **Official 0G Skills:** Installed in `./.0g-skills` (reference `./.0g-skills/patterns/NETWORK_CONFIG.md`)
 
 ---
 
-## 2. Cursor Instant Initialization Prompt
+## 2. Cursor Instant Initialization & Data Room Prompting
 
 When opening Cursor, you can initialize the session instantly with:
 
@@ -30,6 +31,26 @@ You are the Cursor Lead Agent coordinating Stillworks on 0G Galileo (16602).
 Deployer wallet 0x237eA22D38a1e20EC50b39711014B9C87dBb21c7 has 0.1 0G funded. 
 Review current status in coordination-v2/STATUS.md and wait for Captain Shreyan's next work order.
 ```
+
+To prompt Cursor with the full ComFi, User Lifecycle & Upkeep architecture:
+
+```text
+Read dataroom/USER_LIFECYCLE_COMFI_AND_UPKEEP.md and coordination-v2/USER_LIFECYCLE_AND_UPKEEP_SPEC.md.
+Stillworks operates a lean, waste-free ComFi loop with iai.finance (0xc77FBd3824cc68e612b26114D176879aDdc29463).
+Strict EF Mandate Local-First privacy: zero traditional central database; all user prompts/notes remain in browser localStorage/IndexedDB.
+Public operational telemetry buffers in Redis and snapshots every 24 hours to 0G Storage Turbo Layer.
+```
+
+---
+
+## 3. Core Architectural Modules for Cursor
+
+| Layer | Reference Document | Key Invariants |
+| :--- | :--- | :--- |
+| **ComFi & User Lifecycle** | `dataroom/USER_LIFECYCLE_COMFI_AND_UPKEEP.md` | Staked `a0G` &rarr; `iAI` yields 1.271 compute credits/day; covers escrow subscription dues; Privy free tier. |
+| **Local-First Privacy** | `coordination-v2/USER_LIFECYCLE_AND_UPKEEP_SPEC.md` | EF CROPS Mandate: Zero server-side personal data; browser client sandbox only. |
+| **24h Storage Upkeep** | `scripts/sync-daily-snapshot.mjs` | Redis buffer &rarr; Celery batch &rarr; 32-byte 0G Merkle root &rarr; 0G Turbo Indexer. |
+| **Sovereign Sidecar** | `scripts/heartbeat-daemon.mjs` | Signs periodic liveness & walkaway proofs to `ProductRegistry.sol`. |
 
 ---
 

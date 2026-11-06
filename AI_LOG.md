@@ -193,3 +193,12 @@ Format:
 - Tool / model: Firstmate (Antigravity)
 - Prompt summary: "nah as for those nft it is this one https://iai.finance/"
 - Commit: f7871c9
+
+
+## 2026-11-06 07:25 IST — Move ComFi & Upkeep Specs to Data Room & Cursor Coordination Hub
+- Files: dataroom/USER_LIFECYCLE_COMFI_AND_UPKEEP.md, dataroom/README.md, coordination-v2/agents/cursor.md, .cursor/rules/crops-comfi.mdc, CURSOR_BOOTSTRAP.md, AI_LOG.md
+- AI-generated: Placed complete ComFi (iai.finance), EF Mandate Local-First privacy, and 24h 0G Storage Turbo upkeep documentation into the dataroom/ folder; created persistent Cursor rule (.cursor/rules/crops-comfi.mdc); updated Cursor coordination page and CURSOR_BOOTSTRAP.md with single-line prompt snippets for Cursor sessions.
+- Human (shreyan): Requested moving this information to the folder Cursor accesses (e.g., dataroom / data room) for easy prompt retrieval.
+- Tool / model: Firstmate (Antigravity)
+- Prompt summary: "Could you move this information to the folder that the cursor agent accesses (e.g., the database) so I can easily prompt it with the relevant data?"
+- Commit: not committed
