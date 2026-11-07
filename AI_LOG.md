@@ -202,3 +202,30 @@ Format:
 - Tool / model: Firstmate (Antigravity)
 - Prompt summary: "Could you move this information to the folder that the cursor agent accesses (e.g., the database) so I can easily prompt it with the relevant data?"
 - Commit: 0722ebd
+
+## 2026-11-06 19:25 IST — Comprehensive System State Audit, Live Server Launch & Model Deployment Blueprint
+- Files: AI_LOG.md, brain/PROJECT_STATE_AND_MODEL_DEPLOYMENT_REPORT.md
+- AI-generated: Conducted full-spectrum architectural and file state audit across AI_LOG.md, dataroom/, contracts/, infra/, app/, and coordination-v2/; launched and verified live Next.js development server on localhost:3000 (200 OK on /, /clean, /proposals, /api/redis-status with 9ms ping latency); mapped the 10 catalog products across offline databases and 0G Private Computer TEE model (0gm-1.0-35b-a3b); generated comprehensive project state report and model deployment guide.
+- Human (shreyan): Requested full project state check, running the site, reading all file states, dataroom, AI_LOG.md, and dependencies to prepare for model deployment.
+- Tool / model: Firstmate (Antigravity)
+- Prompt summary: "so what is the current project state right now can you run the site and read all the current file states @AI_LOG.md @dataroom and rest of other dependencies so that we can deploy our set of models"
+- Commit: (working tree)
+
+## 2026-11-07 08:53 IST — Author Hackathon Master Submission Pack & Production README
+- Files: SUBMISSION.md, README.md, AI_LOG.md
+- AI-generated: Authored complete, ready-to-submit hackathon submission package in SUBMISSION.md (mission statement, two-line pitch, CROPS invariants, 0G Galileo deployed contracts, live onchain transaction proofs, 0G Storage Turbo Merkle roots, 0G Private Computer TEE request IDs, and 39/39 passing Foundry tests); updated README.md with live deployment links, testnet contracts, and team attribution.
+- Human (shreyan): Requested filling up the submission information, all contracts, pitch, example submission, mission statement, information, and goals.
+- Tool / model: Firstmate (Antigravity)
+- Prompt summary: "fill up the information for the submission right now all the contracts pitch example submission the mission statement the information , goal and in parallel use the same"
+- Commit: (working tree)
+
+## 2026-11-07 09:10 IST — Upload Live Site Build & Distribution Bundle to 0G Storage Turbo
+- Files: scripts/upload-site-to-0g.mjs, 0g-live-site-deployment.json, SUBMISSION.md, README.md, AI_LOG.md
+- AI-generated: Created upload automation script (`scripts/upload-site-to-0g.mjs`) and successfully uploaded both the static storefront HTML (`app/out/index.html`) and the full deployable site ZIP archive (`stillworks-site-bundle.zip`) to live 0G Storage Turbo layer. Verified onchain transaction `0x40df685dee5d04cf8d08a98a629d74c7fe6fd7e618ffde4f3c74138afa17c77b` on 0G Galileo testnet; verified 32-byte Merkle roots (`0x90aa2ba3...` and `0x30f34b58...`) and confirmed 100% verified Merkle proof download retrieval across 4 active decentralized storage nodes.
+- Human (shreyan): Instructed to upload the build to 0G live site link for submission.
+- Tool / model: Firstmate (Antigravity)
+- Prompt summary: "upload the build to 0g live site link for submission"
+- Commit: (working tree)
+
+
+

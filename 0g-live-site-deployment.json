@@ -1,0 +1,16 @@
+{
+  "deployedAt": "2026-11-07T03:39:11.714Z",
+  "network": "0G Galileo Testnet (16602)",
+  "storefrontHtml": {
+    "merkleRoot": "0x90aa2ba31e38cac3d6e87c138a4921c250ad59c0e452deea71a6546997dab294",
+    "txHash": "",
+    "gatewayUrl": "https://indexer-storage-testnet-turbo.0g.ai/file/0x90aa2ba31e38cac3d6e87c138a4921c250ad59c0e452deea71a6546997dab294"
+  },
+  "siteBundleZip": {
+    "merkleRoot": "0x30f34b5845c2d713158a39f352947a6bc12db7b05a56485c4752e148697947d6",
+    "txHash": "0x40df685dee5d04cf8d08a98a629d74c7fe6fd7e618ffde4f3c74138afa17c77b",
+    "gatewayUrl": "https://indexer-storage-testnet-turbo.0g.ai/file/0x30f34b5845c2d713158a39f352947a6bc12db7b05a56485c4752e148697947d6"
+  },
+  "indexerEndpoint": "https://indexer-storage-testnet-turbo.0g.ai",
+  "deployer": "0x237eA22D38a1e20EC50b39711014B9C87dBb21c7"
+}
