@@ -225,7 +225,16 @@ Format:
 - Human (shreyan): Instructed to upload the build to 0G live site link for submission.
 - Tool / model: Firstmate (Antigravity)
 - Prompt summary: "upload the build to 0g live site link for submission"
+- Commit: 236eb35
+
+## 2026-11-07 09:46 IST — Embed ETHGlobal Sponsor Prize Tracks into README and Sync to Main
+- Files: README.md, AI_LOG.md
+- AI-generated: Added dedicated 0G Foundation ($15,000) and Ethereum Foundation CROPS ($15,000) prize track breakdown with direct code links, live 0G storage site URL, and architectural applicability points directly in the root README.md.
+- Human (shreyan): Requested pushing the README information to the main repo.
+- Tool / model: Firstmate (Antigravity)
+- Prompt summary: "push the information to readme to the main repo"
 - Commit: (working tree)
+
 
 
 

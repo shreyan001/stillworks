@@ -9,6 +9,19 @@
 
 ---
 
+## 🏆 ETHGlobal Mumbai Prize Tracks
+
+### 1. 0G — Build with 0G & 0G Private Computer ($15,000)
+- **Applicability:** Stillworks natively utilizes the entire 0G decentralized stack: 0G Galileo testnet (16602) for settlement and heartbeat verification, 0G Storage Turbo for takedown-proof storefront pinning and encrypted exit bundles, and 0G Private Computer TEE enclaves for confidential passport compliance audits.
+- **Key Code Links:** [`scripts/test-inference-pipeline.mjs#L34-L115`](scripts/test-inference-pipeline.mjs#L34-L115) · [`scripts/upload-site-to-0g.mjs`](scripts/upload-site-to-0g.mjs) · [`app/src/lib/zerog/storage.ts`](app/src/lib/zerog/storage.ts)
+- **Live 0G Site Link:** [Storefront on 0G Storage Turbo](https://indexer-storage-testnet-turbo.0g.ai/file/0x90aa2ba31e38cac3d6e87c138a4921c250ad59c0e452deea71a6546997dab294)
+
+### 2. Ethereum Foundation — Best CROPS App ($15,000)
+- **Applicability:** Textbook implementation of the EF CROPS Mandate (`blog.ethereum.org/2026/03/13/ef-mandate`). Strict local-first privacy with **zero central database**, non-custodial smart contract escrow rails unlocking **100% pro-rata refunds upon missed founder heartbeats**, and client-encrypted walkaway bundles runnable offline via Docker compose with zero data loss.
+- **Key Code Links:** [`contracts/src/SubscriptionEscrow.sol#L164-L200`](contracts/src/SubscriptionEscrow.sol#L164-L200) · [`contracts/src/StillworksHourlyProtocolHub.sol`](contracts/src/StillworksHourlyProtocolHub.sol) · [`app/src/lib/walkaway.ts`](app/src/lib/walkaway.ts)
+
+---
+
 ## 🌟 Overview & Mission
 
 SaaS lock-in is a systemic threat to software sovereignty. When centralized subscription platforms hike prices, terminate accounts, or sunset tools, users lose both their workflows and their historical data. 
