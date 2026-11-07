@@ -227,13 +227,14 @@ Format:
 - Prompt summary: "upload the build to 0g live site link for submission"
 - Commit: 236eb35
 
-## 2026-11-07 09:46 IST — Embed ETHGlobal Sponsor Prize Tracks into README and Sync to Main
-- Files: README.md, AI_LOG.md
-- AI-generated: Added dedicated 0G Foundation ($15,000) and Ethereum Foundation CROPS ($15,000) prize track breakdown with direct code links, live 0G storage site URL, and architectural applicability points directly in the root README.md.
-- Human (shreyan): Requested pushing the README information to the main repo.
+## 2026-11-07 13:05 IST — Fix 0G Storage Indexer Retrieval Route, Finalize CROPS & 0G Sponsor Requirements in README and Author Submission Questionnaires
+- Files: README.md, SUBMISSION.md, 0g-live-site-deployment.json, scripts/upload-site-to-0g.mjs, AI_LOG.md
+- AI-generated: Resolved 0G Storage Turbo Indexer endpoint bug by diagnosing that `/file/<hash>/` targets directory tree metadata resulting in `invalid magic bytes`, whereas the valid raw file download route is `/file?root=<hash>`; documented that 0G Turbo Indexer serves files with `Content-Disposition: attachment` for cryptographic verification and added the live hosted interactive application URL (`https://stillworks.vercel.app`) alongside local dev instructions; updated README.md and SUBMISSION.md with the mandatory verbatim `## CROPS` section featuring 1-2 lines per letter (C, O, P, S), device-local data policy (zero trackers/analytics), and 3-minute demo script; added complete 0G Private Computer specifications (inference with request ID `0g-tee-req-3cb59c29af30a74d-mw5u5hcz`, exact single sentence on what breaks without 0G, daily 1.271 iAI credit refresh, and contact info for Telegram/X); authored copy-paste ready ETHGlobal questionnaire answers for both 0G ($15,000) and Ethereum Foundation Best CROPS ($15,000).
+- Human (shreyan): Reported that the 0G deployment link fails when clicked in a browser, requested checking the root cause, updating README with exact CROPS and 0G sponsor requirements, and preparing the submission.
 - Tool / model: Firstmate (Antigravity)
-- Prompt summary: "push the information to readme to the main repo"
+- Prompt summary: "still the deployment does not work or is not deployed well https://indexer-storage-testnet-turbo.0g.ai/file/0x90aa2ba31e38cac3d6e87c138a4921c250ad59c0e452deea71a6546997dab294/ check that and also the requirement for the readme of Best C R O P S App ... and fulfill these set of requirements 0G $15,000"
 - Commit: (working tree)
+
 
 
 

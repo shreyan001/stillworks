@@ -50,7 +50,7 @@ async function uploadSingleFile(filePath, label) {
 
     const txHash = 'txHash' in result ? result.txHash : (result.txHashes ? result.txHashes[0] : 'N/A');
     console.log(`✓ Onchain Transaction Hash: ${txHash}`);
-    console.log(`✓ 0G Storage Retrieval Link: ${STORAGE_INDEXER}/file/${rootHash}`);
+    console.log(`✓ 0G Storage Retrieval Link: ${STORAGE_INDEXER}/file?root=${rootHash}`);
     return { rootHash, txHash, size: stats.size };
   } finally {
     await file.close();
@@ -75,11 +75,11 @@ async function main() {
   console.log(`======================================================`);
   console.log(`Storefront HTML Root: ${htmlResult.rootHash}`);
   console.log(`Storefront HTML Tx:   ${htmlResult.txHash}`);
-  console.log(`Site Gateway Link:    ${STORAGE_INDEXER}/file/${htmlResult.rootHash}`);
+  console.log(`Site Gateway Link:    ${STORAGE_INDEXER}/file?root=${htmlResult.rootHash}`);
   console.log(`------------------------------------------------------`);
   console.log(`Full Bundle Root:     ${zipResult.rootHash}`);
   console.log(`Full Bundle Tx:       ${zipResult.txHash}`);
-  console.log(`Bundle Gateway Link:  ${STORAGE_INDEXER}/file/${zipResult.rootHash}`);
+  console.log(`Bundle Gateway Link:  ${STORAGE_INDEXER}/file?root=${zipResult.rootHash}`);
   console.log(`======================================================\n`);
 
   // Write deployment result to file for reference
@@ -89,12 +89,12 @@ async function main() {
     storefrontHtml: {
       merkleRoot: htmlResult.rootHash,
       txHash: htmlResult.txHash,
-      gatewayUrl: `${STORAGE_INDEXER}/file/${htmlResult.rootHash}`,
+      gatewayUrl: `${STORAGE_INDEXER}/file?root=${htmlResult.rootHash}`,
     },
     siteBundleZip: {
       merkleRoot: zipResult.rootHash,
       txHash: zipResult.txHash,
-      gatewayUrl: `${STORAGE_INDEXER}/file/${zipResult.rootHash}`,
+      gatewayUrl: `${STORAGE_INDEXER}/file?root=${zipResult.rootHash}`,
     },
     indexerEndpoint: STORAGE_INDEXER,
     deployer: wallet.address,

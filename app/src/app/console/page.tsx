@@ -6,7 +6,6 @@ import { WalletButton } from '@/components/WalletButton';
 import { InferenceNoteModule } from '@/components/InferenceNoteModule';
 import { AgentPassModule } from '@/components/AgentPassModule';
 import { UpkeepMonitor } from '@/components/UpkeepMonitor';
-import { MemData, Indexer } from '@0gfoundation/0g-storage-ts-sdk';
 import {
   Database,
   Upload,
@@ -85,6 +84,7 @@ export default function ConsolePage() {
     try {
       const encoder = new TextEncoder();
       const bytes = encoder.encode(exportInput);
+      const { MemData } = await import('@0gfoundation/0g-storage-ts-sdk');
       const memData = new MemData(bytes);
 
       const [tree, err] = await memData.merkleTree();
@@ -123,6 +123,7 @@ export default function ConsolePage() {
     setImportResult(null);
 
     try {
+      const { Indexer } = await import('@0gfoundation/0g-storage-ts-sdk');
       const indexer = new Indexer(INDEXER_URL);
       const [blob, err] = await indexer.downloadToBlob(hash);
 

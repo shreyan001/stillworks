@@ -151,7 +151,7 @@ export function ProductView({ product }: { product: Product }) {
 
   const handleDownloadWalkaway = () => {
     const bundle = generateWalkawayBundle(product.slug, product.name);
-    const blob = new Blob([bundle.zipBytes], { type: 'application/zip' });
+    const blob = new Blob([bundle.zipBytes as any], { type: 'application/zip' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;

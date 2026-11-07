@@ -9,6 +9,7 @@ export function Navbar() {
 
   const navLinks = [
     { href: '/', label: 'Marketplace' },
+    { href: '/pitch', label: '2-Min Pitch' },
     { href: '/app', label: 'Launches' },
     { href: '/leaderboard', label: 'Registry' },
     { href: '/proposals', label: 'Reward Hub' },

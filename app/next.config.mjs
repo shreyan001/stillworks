@@ -5,10 +5,8 @@ const nextConfig = {
     unoptimized: true,
   },
   webpack: (config, { dev, isServer }) => {
-    // In dev mode, use fast in-memory caching to eliminate OneDrive file-sync lockups
-    if (dev) {
-      config.cache = { type: 'memory' };
-    }
+    // Use fast in-memory caching to eliminate OneDrive file-sync lockups
+    config.cache = { type: 'memory' };
     config.externals.push('pino-pretty', 'lokijs', 'encoding');
     config.resolve.alias = {
       ...config.resolve.alias,
